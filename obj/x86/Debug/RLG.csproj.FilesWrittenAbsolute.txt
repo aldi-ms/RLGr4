@@ -1,0 +1,10 @@
+/home/scienide/Projects/RLGr4/RLG/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/scienide/Projects/RLGr4/RLG/bin/Debug/OpenTK.dll.config
+/home/scienide/Projects/RLGr4/RLG/bin/Debug/Tao.Sdl.dll.config
+/home/scienide/Projects/RLGr4/RLG/bin/Debug/RLG.exe.mdb
+/home/scienide/Projects/RLGr4/RLG/bin/Debug/RLG.exe
+/home/scienide/Projects/RLGr4/RLG/obj/x86/Debug/RLG.exe
+/home/scienide/Projects/RLGr4/RLG/obj/x86/Debug/RLG.exe.mdb
+/home/scienide/Projects/RLGr4/RLG/bin/Debug/MonoGame.Framework.dll
+/home/scienide/Projects/RLGr4/RLG/bin/Debug/OpenTK.dll
+/home/scienide/Projects/RLGr4/RLG/bin/Debug/Tao.Sdl.dll
