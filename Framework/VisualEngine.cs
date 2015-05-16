@@ -83,6 +83,24 @@ namespace RLG.Framework
 
         public Point DeltaTileDrawCoordinates { get; set; }
 
+        // DrawString properties
+        public Color ASCIIColor { get; set; }
+
+        public float ASCIIRotation { get; set; }
+
+        public Vector2 ASCIIOrigin { get; set; }
+
+        public float ASCIIScale { get; set; }
+
+        public SpriteEffects ASCIIEffects { get; set; }
+
+        /// <summary>
+        /// Gets or sets the layer depth of the font when using ASCII.
+        /// 0 represents the front layer and 1 represents a back layer.
+        /// </summary>
+        /// <value>The layer depth.</value>
+        public float LayerDepth { get; set; }
+
         #endregion
 
         public VisualEngine(
@@ -99,10 +117,18 @@ namespace RLG.Framework
             this.Map = map;
             this.FOVSettings = new FOVSettings();
 
+            // Set defaults
             this.TopMargin = 10;
             this.LeftMargin = 10;
             this.spriteDict = new Dictionary<string, Texture2D>();
             this.DeltaTileDrawCoordinates = new Point(0, 0);
+
+            this.ASCIIColor = Color.White;
+            this.ASCIIRotation = 0f;
+            this.ASCIIScale = 1f;
+            this.ASCIIOrigin = new Vector2(0, 0);
+            this.ASCIIEffects = SpriteEffects.None;
+            this.LayerDepth = 0f;
 
             switch (mode)
             {
@@ -147,6 +173,7 @@ namespace RLG.Framework
                 this.FOVSettings.Shape);
 
             #region Coordinates
+
             // Get the start (Tile)coordinates  for the Map
             Point startTile = new Point(
                                   mapCenter.X - (this.MapDrawboxTileSize.X / 2), 
@@ -187,8 +214,8 @@ namespace RLG.Framework
                 for (int y = 0; y < this.MapDrawboxTileSize.Y; y++)
                 {
                     Vector2 drawPosition = new Vector2(
-                        this.LeftMargin + (this.tileSize * x) + this.DeltaTileDrawCoordinates.X,
-                        this.TopMargin + (this.tileSize * y) + this.DeltaTileDrawCoordinates.Y);
+                                               this.LeftMargin + (this.tileSize * x) + this.DeltaTileDrawCoordinates.X,
+                                               this.TopMargin + (this.tileSize * y) + this.DeltaTileDrawCoordinates.Y);
                     Point tile = new Point(startTile.X + x, startTile.Y + y);
 
                     switch (this.mode)
@@ -197,13 +224,34 @@ namespace RLG.Framework
                         case VisualMode.ASCII:
                             if (this[tile].IsVisible)
                             {
-                                this[tile].PropertyFlags |= Flags.HasBeenSeen;
+                                if (!this[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
+                                {
+                                    this[tile].PropertyFlags |= Flags.HasBeenSeen;
+                                }
 
-                                spriteBatch.DrawString(this.SpriteFont, this[tile].DrawString, drawPosition, Color.White);
+                                spriteBatch.DrawString(
+                                    this.SpriteFont,
+                                    this[tile].DrawString,
+                                    drawPosition, 
+                                    this.ASCIIColor,
+                                    this.ASCIIRotation,
+                                    this.ASCIIOrigin,
+                                    this.ASCIIScale,
+                                    this.ASCIIEffects,
+                                    this.LayerDepth);
                             }
                             else if (this[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
                             {
-                                spriteBatch.DrawString(this.SpriteFont, this[tile].DrawString, drawPosition, TileMask);
+                                spriteBatch.DrawString(
+                                    this.SpriteFont, 
+                                    this[tile].DrawString,
+                                    drawPosition,
+                                    VisualEngine.TileMask,
+                                    this.ASCIIRotation,
+                                    this.ASCIIOrigin,
+                                    this.ASCIIScale,
+                                    this.ASCIIEffects,
+                                    this.LayerDepth);
                             }
                             break;
                         #endregion
@@ -212,7 +260,10 @@ namespace RLG.Framework
                         case VisualMode.Sprites:
                             if (this[tile].IsVisible)
                             {
-                                this[tile].PropertyFlags |= Flags.HasBeenSeen;
+                                if (!this[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
+                                {
+                                    this[tile].PropertyFlags |= Flags.HasBeenSeen;
+                                }
                              
                                 // Draw the Terrain first as it should exist for every Tile.
                                 terrainTexture = null;
@@ -259,7 +310,7 @@ namespace RLG.Framework
                                         this[tile].ObjectsContained.GetTerrain().DrawString,
                                         out terrainTexture))
                                 {
-                                    spriteBatch.Draw(terrainTexture, drawPosition, TileMask); 
+                                    spriteBatch.Draw(terrainTexture, drawPosition, VisualEngine.TileMask); 
                                 }
                             }
                             break;

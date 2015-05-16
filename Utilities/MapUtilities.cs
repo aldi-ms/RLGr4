@@ -53,15 +53,13 @@ namespace RLG.Utilities
                             else
                             {
                                 Flags flags = Flags.IsTransparent;
-                                resultTiles[i, j] = new Tile(",", flags);
+                                resultTiles[i, j] = new Tile(".", flags);
                             }
                         }
-
                     }
                     break;
 
-                case VisualMode.Sprites:
-                    throw new System.NotImplementedException();
+                case VisualMode.Sprites:                    
                     break;
             }
 

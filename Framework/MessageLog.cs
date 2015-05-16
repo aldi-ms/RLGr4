@@ -27,9 +27,32 @@ namespace RLG.Framework
     using System;
     using System.Text;
 
+    /*
+    * * * * * * *
+    * Guidelines for using colors in the Message Log.
+    * * * * *
+    * To draw a string/part of a string in a specific color use:
+
+    ~[select_char][color_UInt]! - formatting sequence in string passed to FormatWriteOnPosition.
+
+    --> '~' - denotes the beggining of a format sequence.
+
+    --> [select_char] - selects the size/length of text to colour (case-insensitive). ->
+        L - selects the next letter from the string.
+        W - selects the next word (selection breaks on whitespace).
+        S - selects the rest of the string.
+
+    --> [color_UInt] - selects the color in which the string will be shown. ->
+        Use Color.ToUInt() to get the UInt representation of a XNA Color.
+        To parse the UInt to color use UInt.ToColor() (both methods are located inside 
+        Framework.ColorExtensions).
+
+    --> '!' - denotes end of sequence.
+    */
+
     /// <summary>
-    /// A Message Log used for sending and drawing messages on the screen.
-    /// Supports colored messages, see Models/ColorMessages.txt for more info.
+    /// A Message Log used for sending and drawing messages on the screen,
+    /// with support for coloring messages in print string.
     /// </summary>
     public sealed class MessageLog : IMessageLog
     {

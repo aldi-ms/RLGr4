@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CanasUvighi.cs" />
     <Compile Include="GameMain.cs" />
     <Compile Include="Framework\FlatArray.cs" />
     <Compile Include="Contracts\ITile.cs" />
@@ -80,18 +79,21 @@
     <Compile Include="Utilities\dm21od.cs" />
     <Compile Include="Entities\MapContainer.cs" />
     <Compile Include="Framework\ActorStatistics.cs" />
+    <Compile Include="CanasUvighi.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />
     <None Include="Content\Content.mgcb" />
     <None Include="packages.config" />
-    <None Include="Content\DejaVuSansMono.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="OpenTK.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Tao.Sdl.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Fonts\BPmono40Bold.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -103,6 +105,7 @@
     <Folder Include="Enumerations\" />
     <Folder Include="Utilities\" />
     <Folder Include="Entities\" />
+    <Folder Include="Content\Fonts\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

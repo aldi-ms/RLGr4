@@ -36,16 +36,18 @@ namespace RLG
     /// </summary>
     public class CanasUvighi : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
-        VisualEngine visEngine;
+        // Custom defined fields
+        private VisualEngine visEngine;
+        private SpriteFont sFont;
 
         public CanasUvighi()
         {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";	            
-            graphics.IsFullScreen = false;		
+            this.graphics = new GraphicsDeviceManager(this);
+            this.Content.RootDirectory = "Content";	            
+            this.graphics.IsFullScreen = false;		
         }
 
         /// <summary>
@@ -67,19 +69,22 @@ namespace RLG
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            this.spriteBatch = new SpriteBatch(GraphicsDevice);
+
             Point size = new Point(10, 10);
-            FlatArray<ITile> tiles = 
-                Utilities.MapUtilities.GenerateRandomMap(size, VisualMode.ASCII);
-            Entities.MapContainer map = new RLG.Entities.MapContainer(tiles);
+            sFont = this.Content.Load<SpriteFont>("Fonts/BPmono40Bold");
+            Entities.MapContainer map = new RLG.Entities.MapContainer(
+                Utilities.MapUtilities.GenerateRandomMap(size, VisualMode.ASCII));
+            
             this.visEngine = new VisualEngine(
                 VisualMode.ASCII,
                 32,
                 size,
                 map,
                 null,
-                this.Content.Load<SpriteFont>("Consolas16"));
-            this.visEngine.DeltaTileDrawCoordinates = new Point(10, 5);
+                sFont);
+            this.visEngine.DeltaTileDrawCoordinates = new Point(4, -4);
+            this.visEngine.ASCIIScale = 0.7f;
 
             //TODO: use this.Content to load your game content here 
         }
@@ -112,9 +117,15 @@ namespace RLG
         {
             graphics.GraphicsDevice.Clear(Color.Black);
             this.visEngine.DrawGame(this.spriteBatch, new Point(3,3));
-            this.visEngine.DrawTileBoxes(this.GraphicsDevice, this.spriteBatch);
-            //TODO: Add your drawing code here
-            
+            //this.visEngine.DrawTileBoxes(this.GraphicsDevice, this.spriteBatch);
+
+            /*
+            // Font testing
+            spriteBatch.Begin();
+            spriteBatch.DrawString(sFont, "ABCDEFGHIJKLMOPQRSTUYWXZ@#.,", new Vector2(100, 100), Color.White, 0f, new Vector2(100, 100), 0.7f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(sFont, "abcdefghijklmopqrstuywxz!?%$)_()[]{}", new Vector2(100, 150), Color.White, 0f, new Vector2(100, 150), 0.5f, SpriteEffects.None, 0f);
+            spriteBatch.End();
+            */
             base.Draw(gameTime);
         }
     }
