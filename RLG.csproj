@@ -47,11 +47,45 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CanasUvighi.cs" />
     <Compile Include="GameMain.cs" />
+    <Compile Include="Framework\FlatArray.cs" />
+    <Compile Include="Contracts\ITile.cs" />
+    <Compile Include="Contracts\ITileContainable.cs" />
+    <Compile Include="Contracts\IGameObject.cs" />
+    <Compile Include="Contracts\IDrawable.cs" />
+    <Compile Include="Contracts\IMap.cs" />
+    <Compile Include="Framework\VisualEngine.cs" />
+    <Compile Include="Framework\FieldOfView\FieldOfView.cs" />
+    <Compile Include="Framework\FieldOfView\FOVAlgorithm.cs" />
+    <Compile Include="Framework\FieldOfView\MRPAS.cs" />
+    <Compile Include="Framework\FieldOfView\ShadowCasting.cs" />
+    <Compile Include="Enumerations\Flags.cs" />
+    <Compile Include="Enumerations\VisualMode.cs" />
+    <Compile Include="Enumerations\ObjectType.cs" />
+    <Compile Include="Contracts\IActor.cs" />
+    <Compile Include="Contracts\IFringe.cs" />
+    <Compile Include="Contracts\IItem.cs" />
+    <Compile Include="Contracts\ITerrain.cs" />
+    <Compile Include="Utilities\GameObjectExtensions.cs" />
+    <Compile Include="Utilities\StringCompression.cs" />
+    <Compile Include="Framework\FieldOfView\FOVSettings.cs" />
+    <Compile Include="Framework\Buffer.cs" />
+    <Compile Include="Framework\KeyboardBuffer.cs" />
+    <Compile Include="Framework\MessageLog.cs" />
+    <Compile Include="Contracts\IMessageLog.cs" />
+    <Compile Include="Utilities\CardinalDirectionExtensions.cs" />
+    <Compile Include="Enumerations\CardinalDirection.cs" />
+    <Compile Include="Utilities\ColorUtilities.cs" />
+    <Compile Include="Utilities\MapUtilities.cs" />
+    <Compile Include="Entities\Tile.cs" />
+    <Compile Include="Utilities\dm21od.cs" />
+    <Compile Include="Entities\MapContainer.cs" />
+    <Compile Include="Framework\ActorStatistics.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />
     <None Include="Content\Content.mgcb" />
     <None Include="packages.config" />
+    <None Include="Content\DejaVuSansMono.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="OpenTK.dll.config">
@@ -62,4 +96,21 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+    <Folder Include="Framework\" />
+    <Folder Include="Framework\FieldOfView\" />
+    <Folder Include="Enumerations\" />
+    <Folder Include="Utilities\" />
+    <Folder Include="Entities\" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="Flat" ResourceNamePolicy="FileName" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

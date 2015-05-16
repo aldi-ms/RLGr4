@@ -2,6 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RLG.Contracts;
+using RLG.Enumerations;
+using RLG.Framework;
+using RLG.Utilities;
 
 #if MONOMAC
 using MonoMac.AppKit;
@@ -49,7 +53,11 @@ namespace RLG
             #elif __IOS__
 			UIApplication.Main(args, null, "AppDelegate");
             #else
-            RunGame();
+            if (true) {
+                RunGame();
+            } else {
+                // Testing
+            }
             #endif
         }
 
@@ -58,7 +66,11 @@ namespace RLG
 		{
 			RunGame();
 		}
-		#endif
+        #endif
+        public static void Testing() 
+        {
+            throw new NotImplementedException();
+        }
     }
 
     #if MONOMAC
@@ -81,5 +93,6 @@ namespace RLG
 		}
 	}  
 	#endif
+
 }
 
