@@ -39,6 +39,7 @@ namespace RLG.Entities
                     "drawString",
                     "Tile drawString cannot be null or empty string!");
             }
+
             this.drawString = drawString;
             this.propertyFlags |= flags;
             this.objectsContained = new List<IGameObject>();
@@ -74,8 +75,6 @@ namespace RLG.Entities
         {
             get
             {
-                //List<IGameObject> listCopy = new List<IGameObject>();
-                //this.objectsContained.CopyTo();
                 return this.objectsContained;
             }
         }
@@ -123,7 +122,13 @@ namespace RLG.Entities
         {
             get
             {
-                throw new System.NotImplementedException();
+                int totalVolume = 0;
+                foreach (var obj in this.ObjectsContained)
+                {
+                    totalVolume += obj.Volume;
+                }
+
+                return totalVolume;
             }
         }
 

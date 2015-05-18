@@ -40,8 +40,8 @@ namespace RLG
         private SpriteBatch spriteBatch;
 
         // Custom defined fields
-        private VisualEngine visEngine;
-        private SpriteFont sFont;
+        private VisualEngine visualEngine;
+        private SpriteFont spriteFont;
 
         public CanasUvighi()
         {
@@ -72,19 +72,19 @@ namespace RLG
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Point size = new Point(10, 10);
-            sFont = this.Content.Load<SpriteFont>("Fonts/BPmono40Bold");
+            spriteFont = this.Content.Load<SpriteFont>("Fonts/BPmono40Bold");
             Entities.MapContainer map = new RLG.Entities.MapContainer(
                 Utilities.MapUtilities.GenerateRandomMap(size, VisualMode.ASCII));
             
-            this.visEngine = new VisualEngine(
+            this.visualEngine = new VisualEngine(
                 VisualMode.ASCII,
                 32,
                 size,
                 map,
                 null,
-                sFont);
-            this.visEngine.DeltaTileDrawCoordinates = new Point(4, -4);
-            this.visEngine.ASCIIScale = 0.7f;
+                spriteFont);
+            this.visualEngine.DeltaTileDrawCoordinates = new Point(4, -4);
+            this.visualEngine.ASCIIScale = 0.7f;
 
             //TODO: use this.Content to load your game content here 
         }
@@ -116,7 +116,7 @@ namespace RLG
         protected override void Draw(GameTime gameTime)
         {
             graphics.GraphicsDevice.Clear(Color.Black);
-            this.visEngine.DrawGame(this.spriteBatch, new Point(3,3));
+            this.visualEngine.DrawGame(this.spriteBatch, new Point(3,3));
             //this.visEngine.DrawTileBoxes(this.GraphicsDevice, this.spriteBatch);
 
             /*

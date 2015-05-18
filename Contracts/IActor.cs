@@ -22,8 +22,30 @@ using System;
 
 namespace RLG.Contracts
 {
+    using RLG.Enumerations;
+
+    /// <summary>
+    /// Interface for the in-game actors.
+    /// </summary>
     public interface IActor : IGameObject
     {
+        /// <summary>
+        /// Gets or sets the current map on which the actor is residing.
+        /// </summary>
+        /// <value>The map.</value>
+        IMap Map { get; set; }
+
+        /// <summary>
+        /// Gets or sets the statistics of the actor.
+        /// </summary>
+        /// <value>The statistics.</value>
+        IStatistics Statistics { get; set; }
+
+        /// <summary>
+        /// Move the actor in the specified direction on the map.
+        /// </summary>
+        /// <param name="direction">Direction.</param>
+        int Move(CardinalDirection direction);
     }
 }
 

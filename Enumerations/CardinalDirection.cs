@@ -21,7 +21,7 @@ namespace RLG.Enumerations
     /// <summary>
     /// Enumeration of the 8 cardinal directions.
     /// </summary>
-    internal enum CardinalDirection
+    public enum CardinalDirection
     {
         North = 0,
         South = 1,

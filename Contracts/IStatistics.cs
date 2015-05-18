@@ -1,5 +1,5 @@
 ﻿//
-//  dm21od.cs
+//  IStatistics.cs
 //
 //  Author:
 //       scienide <alexandar921@abv.bg>
@@ -19,22 +19,15 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace RLG.Utilities
+namespace RLG.Contracts
 {
-    using System.Collections;
-    using System.Collections.Generic;
-
-    public static class dm21od
+    public interface IStatistics
     {
-        public static IEnumerable<T> MakeDeepCopy<T>(this IEnumerable<T> list)
-        {
-            List<T> resultList = new List<T>();
-            foreach (var item in list)
-            {
-                resultList.Add(item);
-            }
-            return resultList;
-        }
+        /// <summary>
+        /// Gets or sets the statistics of an object at the specified index.
+        /// </summary>
+        /// <param name="index">Index (statistic) to look at.</param>
+        uint this [string index] { get; set; }
     }
 }
 

@@ -76,10 +76,11 @@
     <Compile Include="Utilities\ColorUtilities.cs" />
     <Compile Include="Utilities\MapUtilities.cs" />
     <Compile Include="Entities\Tile.cs" />
-    <Compile Include="Utilities\dm21od.cs" />
     <Compile Include="Entities\MapContainer.cs" />
-    <Compile Include="Framework\ActorStatistics.cs" />
     <Compile Include="CanasUvighi.cs" />
+    <Compile Include="Contracts\IStatistics.cs" />
+    <Compile Include="Entities\Actor.cs" />
+    <Compile Include="Entities\ObjectStatistics.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />
