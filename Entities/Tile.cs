@@ -21,9 +21,10 @@
 
 namespace RLG.Entities
 {
+    using System;
+    using System.Collections.Generic;
     using RLG.Contracts;
     using RLG.Enumerations;
-    using System.Collections.Generic;
 
     public class Tile : ITile
     {
@@ -45,31 +46,9 @@ namespace RLG.Entities
             this.objectsContained = new List<IGameObject>();
         }
 
-        #region ITile implementation
+        #region Properties
 
-        // TO DO: (params IGameObject[] gameObject)
-        public bool AddObject(IGameObject gameObject)
-        {
-            if (gameObject == null) {
-                throw new System.ArgumentNullException(
-                    "gameObject",
-                    "On adding game object to a tile, the object cannot be null!");
-            }
-
-            this.objectsContained.Add(gameObject);
-            return true;
-        }
-
-        public bool RemoveObject(IGameObject gameObject)
-        {
-            if (gameObject == null) {
-                throw new System.ArgumentNullException(
-                    "gameObject",
-                    "On removing game object from a tile, the object cannot be null!");
-            }
-
-            return this.objectsContained.Remove(gameObject);
-        }
+        public string Name { get; set; }
 
         public IEnumerable<IGameObject> ObjectsContained
         {
@@ -78,10 +57,6 @@ namespace RLG.Entities
                 return this.objectsContained;
             }
         }
-
-        #endregion
-
-        #region IGameObject implementation
 
         public Flags PropertyFlags
         {
@@ -102,27 +77,30 @@ namespace RLG.Entities
             }
         }
 
-        #endregion
-
-        #region IDrawable implementation
-
         public string DrawString
         {
             get
             {
                 return this.drawString;
             }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(
+                        "drawString", 
+                        "Tile.DrawString cannot be null!");
+                }
+
+                this.drawString = value;
+            }
         }
 
-        #endregion
-
-        #region ITileContainable implementation
-
-        public int Volume
+        public byte Volume
         {
             get
             {
-                int totalVolume = 0;
+                byte totalVolume = 0;
                 foreach (var obj in this.ObjectsContained)
                 {
                     totalVolume += obj.Volume;
@@ -130,11 +108,10 @@ namespace RLG.Entities
 
                 return totalVolume;
             }
+            set
+            {                 
+            }
         }
-
-        #endregion
-
-        #region IFovCell implementation
 
         public bool IsTransparent
         {
@@ -164,6 +141,39 @@ namespace RLG.Entities
         }
 
         #endregion
+
+        public bool AddObject(IGameObject gameObject)
+        {
+            if (gameObject == null)
+            {
+                throw new System.ArgumentNullException(
+                    "gameObject",
+                    "On adding game object to a tile, the object cannot be null!");
+            }
+
+            // Volume check. Each Tile has 100 volume available, and each object
+            // has a volume property.
+            if (this.Volume + gameObject.Volume > 100)
+            {
+                return false;
+            }
+
+
+            this.objectsContained.Add(gameObject);
+            return true;
+        }
+
+        public bool RemoveObject(IGameObject gameObject)
+        {
+            if (gameObject == null)
+            {
+                throw new System.ArgumentNullException(
+                    "gameObject",
+                    "On removing game object from a tile, the object cannot be null!");
+            }
+
+            return this.objectsContained.Remove(gameObject);
+        }
     }
 }
 

@@ -209,6 +209,7 @@ namespace RLG.Framework
             Texture2D actorTexture = null;
 
             spriteBatch.Begin();
+
             for (int x = 0; x < this.MapDrawboxTileSize.X; x++)
             {
                 for (int y = 0; y < this.MapDrawboxTileSize.Y; y++)
@@ -222,6 +223,7 @@ namespace RLG.Framework
                     {
                         #region ASCII
                         case VisualMode.ASCII:
+
                             if (this[tile].IsVisible)
                             {
                                 if (!this[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
@@ -241,7 +243,7 @@ namespace RLG.Framework
                                     this.LayerDepth);
                             }
                             else if (this[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
-                            {
+                            {                                  
                                 spriteBatch.DrawString(
                                     this.SpriteFont, 
                                     this[tile].DrawString,
@@ -322,7 +324,7 @@ namespace RLG.Framework
             spriteBatch.End();
         }
 
-        public void DrawTileBoxes(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
+        public void DrawGrid(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
             Texture2D simpleTexture = new Texture2D(graphicsDevice, 1, 1, false, SurfaceFormat.Color);
             simpleTexture.SetData<Color>(new[] { Color.White });

@@ -21,7 +21,7 @@ namespace RLG.Utilities
     using Microsoft.Xna.Framework;
     using RLG.Enumerations;
 
-    internal static class CardinalDirectionExtensions
+    public static class CardinalDirectionExtensions
     {
         public static Point GetDeltaCoordinate(this CardinalDirection direction)
         {

@@ -22,7 +22,7 @@ namespace RLG.Contracts
 {
     public interface IDrawable
     {
-        string DrawString { get; }
+        string DrawString { get; set; }
     }
 }
 

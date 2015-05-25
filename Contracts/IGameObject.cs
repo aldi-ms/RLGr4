@@ -22,10 +22,13 @@ namespace RLG.Contracts
 {
     using RLG.Enumerations;
 
-    public interface IGameObject : ITileContainable, IDrawable
+    public interface IGameObject : IDrawable //ITileContainable
     {
+        string Name { get; set; }
+
         Flags PropertyFlags { get; set; }
-        //ObjectType Type { get; }
+
+        byte Volume { get; set; }
     }
 }
 

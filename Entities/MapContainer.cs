@@ -21,15 +21,38 @@
 
 namespace RLG.Entities
 {
+    using Microsoft.Xna.Framework;
     using RLG.Contracts;
     using RLG.Framework;
 
     public class MapContainer : IMap
     {
-        public FlatArray<ITile> Tiles { get; set; }
         public MapContainer(FlatArray<ITile> tiles)
         {
             this.Tiles = tiles;
+        }
+
+        #region Properties
+
+        public FlatArray<ITile> Tiles { get; set; }
+
+        public ITile this[Point tileCoordinates]
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        #endregion
+
+        public bool CheckTile(Point tileCoordinates, out string blockingObject)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

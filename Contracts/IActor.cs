@@ -18,10 +18,10 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-using System;
 
 namespace RLG.Contracts
 {
+    using Microsoft.Xna.Framework;
     using RLG.Enumerations;
 
     /// <summary>
@@ -33,7 +33,9 @@ namespace RLG.Contracts
         /// Gets or sets the current map on which the actor is residing.
         /// </summary>
         /// <value>The map.</value>
-        IMap Map { get; set; }
+        IMap CurrentMap { get; set; }
+
+        Point Position { get; set; }
 
         /// <summary>
         /// Gets or sets the statistics of the actor.

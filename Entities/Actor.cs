@@ -21,86 +21,118 @@
 
 namespace RLG.Entities
 {
+    using Microsoft.Xna.Framework;
+    using System;
     using RLG.Contracts;
-    
+    using RLG.Enumerations;
+    using RLG.Utilities;
+
     public class Actor : IActor
     {
-        public Actor()
+        private byte volume;
+        private string drawString;
+
+        #region Constructors
+
+        public Actor(string name, IStatistics statistics, IMap map, byte volume)
+        { 
+            this.Name = name;
+            this.Statistics = statistics;
+            this.CurrentMap = map;
+
+            this.Volume = volume;
+        }
+
+        public Actor(string name, IStatistics statistics, IMap map)
+            : this(name, statistics, map, 100)
         {
         }
 
-        #region IActor implementation
-
-        int IActor.Move(RLG.Enumerations.CardinalDirection direction)
+        public Actor(string name, IStatistics statistics)
+            : this(name, statistics, null, 100)
         {
-            throw new System.NotImplementedException();
         }
 
-        IMap IActor.Map
+        #endregion
+
+        #region Properties
+
+        public string Name { get; set; }
+
+        public Point Position { get; set; }
+
+        public IMap CurrentMap { get; set; }
+
+        public IStatistics Statistics { get; set; }
+
+        public Flags PropertyFlags { get; set; }
+
+        public string DrawString
         {
             get
             {
-                throw new System.NotImplementedException();
+                return this.drawString;
             }
             set
             {
-                throw new System.NotImplementedException();
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentNullException(
+                        "drawString", 
+                        "Actor drawString cannot be null!");
+                }
+
+                this.drawString = value;
             }
         }
 
-        IStatistics IActor.Statistics
+        public byte Volume
         {
             get
             {
-                throw new System.NotImplementedException();
+                return this.volume;
             }
             set
             {
-                throw new System.NotImplementedException();
+                if (value > 100)
+                {
+                    throw new ArgumentException("Actor.Volume cannot be > 100!");
+                }
+
+                this.volume = value;
             }
         }
 
         #endregion
 
-        #region IGameObject implementation
-
-        RLG.Enumerations.Flags IGameObject.PropertyFlags
+        public int Move(CardinalDirection direction)
         {
-            get
+            if (this.CurrentMap == null)
             {
-                throw new System.NotImplementedException();
+                throw new ArgumentNullException(
+                    "map",
+                    "When calling Move() method on an IActor, IActor.Map cannot be null!");
             }
-            set
+
+            Point newPosition = this.Position + direction.GetDeltaCoordinate();
+
+            string blockingObj = string.Empty;
+            if (this.CurrentMap.CheckTile(newPosition, out blockingObj))
             {
-                throw new System.NotImplementedException();
+                this.CurrentMap[this.Position].RemoveObject(this);
+                this.CurrentMap[newPosition].AddObject(this);
+                this.Position = newPosition;
+
+                return this.CurrentMap[newPosition].ObjectsContained.GetTerrain().MoveCost;
             }
-        }
-
-        #endregion
-
-        #region IDrawable implementation
-
-        string IDrawable.DrawString
-        {
-            get
+            else
             {
-                throw new System.NotImplementedException();
-            }
-        }
+                // unsuccessful move
+                // message log block object
 
-        #endregion
-
-        #region ITileContainable implementation
-
-        int ITileContainable.Volume
-        {
-            get
-            {
-                return 100;
+                return 0;
             }
         }
-
-        #endregion
     }
 }
 
