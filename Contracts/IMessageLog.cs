@@ -42,7 +42,7 @@ namespace RLG.Contracts
         /// Draw the log on the screen.
         /// </summary>
         /// <param name="spriteBatch">SpriteBatch used to draw the log.</param>
-        void Draw(SpriteBatch spriteBatch);
+        void DrawLog(SpriteBatch spriteBatch);
 
         /// <summary>
         /// Clear the log.

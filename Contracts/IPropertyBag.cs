@@ -21,7 +21,7 @@
 
 namespace RLG.Contracts
 {
-    public interface IStatistics
+    public interface IPropertyBag
     {
         /// <summary>
         /// Gets or sets the statistics of an object at the specified index.

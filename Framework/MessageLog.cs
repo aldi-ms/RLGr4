@@ -20,12 +20,13 @@ namespace RLG.Framework
 {
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using RLG.Enumerations;
-    using RLG.Framework;
-    using RLG.Contracts;
-    using RLG.Utilities;
     using System;
     using System.Text;
+
+    using RLG.Contracts;
+    using RLG.Enumerations;
+    using RLG.Framework;
+    using RLG.Utilities;
 
     /*
     * * * * * * *
@@ -188,7 +189,7 @@ namespace RLG.Framework
         /// </summary>
         /// <remarks>To color string/part of a string to a specific color check ColorMessages.txt.</remarks>
         /// <param name="spriteBatch">The SpriteBatch object used to draw the log.</param>
-        public void Draw(SpriteBatch spriteBatch)
+        public void DrawLog(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
 
@@ -319,7 +320,8 @@ namespace RLG.Framework
         /// <returns>Length of the text drawn on the screen, using this SpriteFont.</returns>
         private int TextScreenLength(string text)
         {
-            return (int)this.spriteFont.MeasureString(this.RemoveColorSeq(text)).X;
+            string clearedText = this.RemoveColorSeq(text);
+            return (int)this.spriteFont.MeasureString(clearedText).X;
         }
 
         /// <summary>

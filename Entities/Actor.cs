@@ -34,21 +34,21 @@ namespace RLG.Entities
 
         #region Constructors
 
-        public Actor(string name, IStatistics statistics, IMap map, byte volume)
+        public Actor(string name, IPropertyBag statistics, IMap map, byte volume)
         { 
             this.Name = name;
-            this.Statistics = statistics;
+            this.Properties = statistics;
             this.CurrentMap = map;
 
             this.Volume = volume;
         }
 
-        public Actor(string name, IStatistics statistics, IMap map)
+        public Actor(string name, IPropertyBag statistics, IMap map)
             : this(name, statistics, map, 100)
         {
         }
 
-        public Actor(string name, IStatistics statistics)
+        public Actor(string name, IPropertyBag statistics)
             : this(name, statistics, null, 100)
         {
         }
@@ -63,7 +63,7 @@ namespace RLG.Entities
 
         public IMap CurrentMap { get; set; }
 
-        public IStatistics Statistics { get; set; }
+        public IPropertyBag Properties { get; set; }
 
         public Flags PropertyFlags { get; set; }
 

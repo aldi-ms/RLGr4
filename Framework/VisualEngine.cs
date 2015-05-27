@@ -24,12 +24,13 @@ namespace RLG.Framework
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Content;
     using Microsoft.Xna.Framework.Graphics;
+    using System;
+    using System.Collections.Generic;
+
     using RLG.Contracts;
     using RLG.Enumerations;
     using RLG.Framework.FieldOfView;
     using RLG.Utilities;
-    using System;
-    using System.Collections.Generic;
 
     public class VisualEngine
     {
@@ -43,6 +44,14 @@ namespace RLG.Framework
         private static readonly Color TileMask = Color.Gray;
 
         #region Properties
+
+        public int TileSize 
+        {
+            get 
+            {
+                return this.tileSize;
+            }
+        }
 
         public ITile this [Point indexPoint]
         {

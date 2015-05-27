@@ -23,11 +23,11 @@ namespace RLG.Framework
 {
     using System.Collections.Generic;
 
-    public class ObjectStatistics : RLG.Contracts.IStatistics
+    public class PropertyBag : RLG.Contracts.IPropertyBag
     {
         private Dictionary<string, uint> statistics;
 
-        public ObjectStatistics()
+        public PropertyBag()
         {
             this.statistics = new Dictionary<string, uint>();
         }

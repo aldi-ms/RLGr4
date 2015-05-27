@@ -78,9 +78,9 @@
     <Compile Include="Entities\Tile.cs" />
     <Compile Include="Entities\MapContainer.cs" />
     <Compile Include="CanasUvighi.cs" />
-    <Compile Include="Contracts\IStatistics.cs" />
     <Compile Include="Entities\Actor.cs" />
-    <Compile Include="Entities\ObjectStatistics.cs" />
+    <Compile Include="Contracts\IPropertyBag.cs" />
+    <Compile Include="Entities\PropertyBag.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />
@@ -95,6 +95,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Fonts\BPmono40Bold.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Fonts\Consolas12.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

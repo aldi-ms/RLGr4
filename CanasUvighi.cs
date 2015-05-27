@@ -25,11 +25,13 @@ namespace RLG
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Storage;
     using Microsoft.Xna.Framework.Input;
+    using System;
+
     using RLG.Contracts;
     using RLG.Enumerations;
+    using RLG.Entities;
     using RLG.Framework;
     using RLG.Utilities;
-    using System;
 
     /// <summary>
     /// This is the main type for your game.
@@ -39,9 +41,17 @@ namespace RLG
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
+
         // Custom defined fields
+
+        private const int ScreenWidth = 800;
+        private const int ScreenHeight = 500;
+
         private VisualEngine visualEngine;
-        private SpriteFont spriteFont;
+        private SpriteFont ASCIIGraphicsFont;
+        private SpriteFont logFont;
+        private IMessageLog messageLog;
+        private KeyboardBuffer keyboardBuffer;
 
         public CanasUvighi()
         {
@@ -58,7 +68,15 @@ namespace RLG
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // Create a new SpriteBatch, which can be used to draw textures.
+            this.spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            this.graphics.PreferredBackBufferWidth = ScreenWidth;
+            this.graphics.PreferredBackBufferHeight = ScreenHeight;
+            this.graphics.ApplyChanges();
+
+            this.keyboardBuffer = new KeyboardBuffer();
+
             base.Initialize();
         }
 
@@ -68,25 +86,37 @@ namespace RLG
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            this.spriteBatch = new SpriteBatch(GraphicsDevice);
+            // Font for ASCII graphics
+            this.ASCIIGraphicsFont = this.Content.Load<SpriteFont>("Fonts/BPmono40Bold");
+            this.logFont = this.Content.Load<SpriteFont>("Fonts/Consolas12");
 
+            #region Temporary code
+
+            // Create a map for testing purposes
             Point size = new Point(10, 10);
-            spriteFont = this.Content.Load<SpriteFont>("Fonts/BPmono40Bold");
-            Entities.MapContainer map = new RLG.Entities.MapContainer(
-                Utilities.MapUtilities.GenerateRandomMap(size, VisualMode.ASCII));
-            
+            MapContainer map = new MapContainer(
+                MapUtilities.GenerateRandomMap(size, VisualMode.ASCII));
+
             this.visualEngine = new VisualEngine(
                 VisualMode.ASCII,
                 32,
                 size,
                 map,
                 null,
-                spriteFont);
+                ASCIIGraphicsFont);
             this.visualEngine.DeltaTileDrawCoordinates = new Point(4, -4);
             this.visualEngine.ASCIIScale = 0.7f;
 
-            //TODO: use this.Content to load your game content here 
+            #endregion
+
+
+            Rectangle logRect = new Rectangle(
+                                    0,
+                                    map.Tiles.Height * this.visualEngine.TileSize,
+                                    ScreenWidth - 30,
+                                    (ScreenHeight - 30) - map.Tiles.Height * this.visualEngine.TileSize);
+            
+            this.messageLog = new MessageLog(logRect, this.logFont);
         }
 
         /// <summary>
@@ -96,16 +126,20 @@ namespace RLG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // For Mobile devices, this logic will close the Game when the Back button is pressed
-            // Exit() is obsolete on iOS
-            #if !__IOS__
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-            Keyboard.GetState().IsKeyDown(Keys.Escape))
+            // Update the keyboard buffer to get pressed keys
+            this.keyboardBuffer.Update();
+
+            // Get the first waiting (FIFO) key
+            Keys key = this.keyboardBuffer.Dequeue();
+
+            // Process the key
+            switch (key) 
             {
-                Exit();
+                case Keys.Escape:
+                    Exit();
+                    break;   
             }
-            #endif
-            // TODO: Add your update logic here			
+
             base.Update(gameTime);
         }
 
@@ -116,16 +150,11 @@ namespace RLG
         protected override void Draw(GameTime gameTime)
         {
             graphics.GraphicsDevice.Clear(Color.Black);
-            this.visualEngine.DrawGame(this.spriteBatch, new Point(3,3));
-            //this.visEngine.DrawTileBoxes(this.GraphicsDevice, this.spriteBatch);
 
-            /*
-            // Font testing
-            spriteBatch.Begin();
-            spriteBatch.DrawString(sFont, "ABCDEFGHIJKLMOPQRSTUYWXZ@#.,", new Vector2(100, 100), Color.White, 0f, new Vector2(100, 100), 0.7f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(sFont, "abcdefghijklmopqrstuywxz!?%$)_()[]{}", new Vector2(100, 150), Color.White, 0f, new Vector2(100, 150), 0.5f, SpriteEffects.None, 0f);
-            spriteBatch.End();
-            */
+            this.visualEngine.DrawGame(this.spriteBatch, new Point(3,3));
+            this.visualEngine.DrawGrid(this.GraphicsDevice, this.spriteBatch);
+            this.messageLog.DrawLog(this.spriteBatch);
+
             base.Draw(gameTime);
         }
     }

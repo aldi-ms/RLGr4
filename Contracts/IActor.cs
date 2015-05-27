@@ -41,7 +41,7 @@ namespace RLG.Contracts
         /// Gets or sets the statistics of the actor.
         /// </summary>
         /// <value>The statistics.</value>
-        IStatistics Statistics { get; set; }
+        IPropertyBag Properties { get; set; }
 
         /// <summary>
         /// Move the actor in the specified direction on the map.
