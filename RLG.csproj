@@ -84,8 +84,10 @@
     <Compile Include="Entities\Actor.cs" />
     <Compile Include="Contracts\IPropertyBag.cs" />
     <Compile Include="Entities\PropertyBag.cs" />
-    <Compile Include="Framework\ActorPriorityQueue.cs" />
     <Compile Include="Framework\PriorityQueue.cs" />
+    <Compile Include="Entities\ActorPriorityQueue.cs" />
+    <Compile Include="Utilities\AStar.cs" />
+    <Compile Include="Entities\Terrain.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

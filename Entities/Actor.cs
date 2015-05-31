@@ -78,6 +78,7 @@ namespace RLG.Entities
         {
             get
             {
+                return "@";
                 return this.drawString;
             }
             set

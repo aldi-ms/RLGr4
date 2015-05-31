@@ -21,10 +21,12 @@
 
 namespace RLG.Entities
 {
+    using Microsoft.Xna.Framework;
     using System;
     using System.Collections.Generic;
     using RLG.Contracts;
     using RLG.Enumerations;
+    using RLG.Utilities;
 
     public class Tile : ITile
     {
@@ -32,7 +34,7 @@ namespace RLG.Entities
         private List<IGameObject> objectsContained;
         private Flags flags;
 
-        public Tile(string drawString, Flags flags)
+        public Tile(string drawString, Flags flags, Point position)
         {
             if (string.IsNullOrEmpty(drawString))
             {
@@ -41,12 +43,15 @@ namespace RLG.Entities
                     "Tile drawString cannot be null or empty string!");
             }
 
+            this.Position = position;
             this.drawString = drawString;
             this.flags |= flags;
             this.objectsContained = new List<IGameObject>();
         }
 
         #region Properties
+
+        public Point Position { get; private set; }
 
         public IEnumerable<ITile> Neighboors { get; set; }
 
@@ -83,6 +88,11 @@ namespace RLG.Entities
         {
             get
             {
+                var actor = this.ObjectsContained.GetActor();
+                if (actor != null)
+                {
+                    return actor.DrawString;
+                }
                 return this.drawString;
             }
             set
@@ -111,7 +121,7 @@ namespace RLG.Entities
                 return totalVolume;
             }
             set
-            {                 
+            {
             }
         }
 

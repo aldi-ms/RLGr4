@@ -54,8 +54,8 @@ namespace RLG.Entities
         public bool CheckTile(Point tileCoordinates, out string blockingObject)
         {
             blockingObject = string.Empty;
-            if (tileCoordinates.X > this.Tiles.Width || tileCoordinates.X < 0
-                || tileCoordinates.Y > this.Tiles.Height || tileCoordinates.Y < 0)
+            if (tileCoordinates.X >= this.Tiles.Width || tileCoordinates.X < 0
+                || tileCoordinates.Y >= this.Tiles.Height || tileCoordinates.Y < 0)
             {
                 return false;
             }

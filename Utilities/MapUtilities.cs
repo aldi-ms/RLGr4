@@ -62,12 +62,13 @@ namespace RLG.Utilities
                             {
                                 // blocked tile
                                 Flags flags = Flags.IsBlocked;
-                                resultTiles[i, j] = new Tile("#", flags);
+                                // implement terrain
+                                resultTiles[i, j] = new Tile("#", flags, new Point(i, j));
                             }
                             else
                             {
                                 Flags flags = Flags.IsTransparent;
-                                resultTiles[i, j] = new Tile(".", flags);
+                                resultTiles[i, j] = new Tile(".", flags, new Point(i, j));
                             }
                         }
                     }
@@ -82,9 +83,9 @@ namespace RLG.Utilities
 
         public static void LoadTileNeighboors(this IMap map)
         {
-            for (int x = 0; x < map.Tiles.Width - 1; x++)
+            for (int x = 0; x < map.Tiles.Width; x++)
             {
-                for (int y = 0; y < map.Tiles.Height - 1; y++)
+                for (int y = 0; y < map.Tiles.Height; y++)
                 {
                     Point currentPosition = new Point(x, y);
 
@@ -102,7 +103,7 @@ namespace RLG.Utilities
                             }
                         }
 
-                        map[currentPosition].Neighboors = neighboors;
+                        map[currentPosition].Neighboors = neighboors ?? new List<ITile>();
                     }
                 }
             }

@@ -57,7 +57,7 @@ namespace RLG
         {
             this.graphics = new GraphicsDeviceManager(this);
             this.Content.RootDirectory = "Content";	            
-            this.graphics.IsFullScreen = false;		
+            this.graphics.IsFullScreen = false;
         }
 
         /// <summary>
@@ -74,6 +74,7 @@ namespace RLG
             this.graphics.PreferredBackBufferWidth = ScreenWidth;
             this.graphics.PreferredBackBufferHeight = ScreenHeight;
             this.graphics.ApplyChanges();
+            this.IsMouseVisible = true;
 
             this.keyboardBuffer = new KeyboardBuffer();
 
@@ -98,6 +99,7 @@ namespace RLG
                                    MapUtilities.GenerateRandomMap(size, VisualMode.ASCII));
             map.LoadTileNeighboors();
 
+
             this.visualEngine = new VisualEngine(
                 VisualMode.ASCII,
                 32,
@@ -118,6 +120,16 @@ namespace RLG
                                     (ScreenHeight - 30) - visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize);
             
             this.messageLog = new MessageLog(logRect, this.logFont);
+            var path = map.GetShortestPath(map[new Point(0, 0)], map[new Point(16, 16)]);
+            this.visualEngine.HighlightPath(path);
+            if (path == null)
+            {
+                this.messageLog.SendMessage("no path exists to 16, 16");
+            }
+
+            IActor actor = new Actor("SCiENiDE", new PropertyBag(), map, 85);
+            actor.Position = new Point();
+            map[actor.Position].AddObject(actor);            
         }
 
         /// <summary>
@@ -138,7 +150,9 @@ namespace RLG
             {
                 case Keys.Escape:
                     Exit();
-                    break;   
+                    break;
+                case Keys.Up:
+                    break;
             }
 
             base.Update(gameTime);

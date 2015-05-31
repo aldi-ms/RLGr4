@@ -21,14 +21,17 @@
 
 namespace RLG.Contracts
 {
-    using RLG.Framework.FieldOfView;
+    using Microsoft.Xna.Framework;
     using System.Collections.Generic;
+    using RLG.Framework.FieldOfView;
 
     public interface ITile : IFovCell, IGameObject
     {
         IEnumerable<IGameObject> ObjectsContained { get; }
 
         IEnumerable<ITile> Neighboors { get; set; }
+
+        Point Position { get; }
 
         bool AddObject(IGameObject gameObject);
 

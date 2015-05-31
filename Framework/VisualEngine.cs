@@ -34,7 +34,10 @@ namespace RLG.Framework
 
     public class VisualEngine
     {
+        private bool highlighterIsOn;
         private int tileSize;
+        private Texture2D highlightTexture;
+        private List<Point> tilesToHighlight;
         private IMap currentMap;
         private VisualMode mode;
         private Dictionary<string, Texture2D> spriteDict;
@@ -45,9 +48,9 @@ namespace RLG.Framework
 
         #region Properties
 
-        public int TileSize 
+        public int TileSize
         {
-            get 
+            get
             {
                 return this.tileSize;
             }
@@ -125,6 +128,8 @@ namespace RLG.Framework
             this.LeftMargin = 10;
             this.spriteDict = new Dictionary<string, Texture2D>();
             this.DeltaTileDrawCoordinates = new Point(0, 0);
+            this.highlighterIsOn = false;
+            this.tilesToHighlight = new List<Point>();
 
             this.ASCIIColor = Color.White;
             this.ASCIIRotation = 0f;
@@ -165,8 +170,52 @@ namespace RLG.Framework
             DrawMap(spriteBatch, mapCenter);
         }
 
+        public void HighlightPath(List<Point> tiles)
+        {
+            if (tiles == null)
+            {
+                this.highlighterIsOn = false;
+                this.tilesToHighlight.Clear();
+                return;
+            }
+
+            this.highlighterIsOn = true;
+            this.tilesToHighlight = tiles;
+        }
+
+        public void DrawGrid(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
+        {
+            Texture2D simpleTexture = new Texture2D(graphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            simpleTexture.SetData<Color>(new[] { Color.White });
+
+            spriteBatch.Begin();
+
+            int xEnd = this.MapDrawboxTileSize.X * this.tileSize;
+            int yEnd = this.MapDrawboxTileSize.Y * this.tileSize;
+
+            for (int x = this.LeftMargin; x <= xEnd + this.LeftMargin; x += this.tileSize)
+            {
+                Rectangle rect = new Rectangle(x, this.LeftMargin, 1, yEnd);
+                spriteBatch.Draw(simpleTexture, rect, Color.Wheat);
+            }
+
+            for (int y = this.TopMargin; y <= yEnd + this.TopMargin; y += this.tileSize)
+            {
+                Rectangle rect = new Rectangle(this.TopMargin, y, xEnd, 1);
+                spriteBatch.Draw(simpleTexture, rect, Color.Wheat);
+            }
+
+            spriteBatch.End();
+        }
+
         private void DrawMap(SpriteBatch spriteBatch, Point mapCenter)
         {
+            if (highlighterIsOn && this.highlightTexture == null)
+            {
+                this.highlightTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+                this.highlightTexture.SetData(new Color[] { Color.Goldenrod });
+            }
+
             this.fieldOfView.ComputeFov(
                 mapCenter.X,
                 mapCenter.Y,
@@ -174,7 +223,7 @@ namespace RLG.Framework
                 this.FOVSettings.LightWalls,
                 this.FOVSettings.Method,
                 this.FOVSettings.Shape);
-
+            
             #region Coordinates
 
             // Get the start (Tile)coordinates  for the Map
@@ -234,6 +283,17 @@ namespace RLG.Framework
                                     this.currentMap[tile].PropertyFlags |= Flags.HasBeenSeen;
                                 }
 
+                                if (this.highlighterIsOn && this.tilesToHighlight.Contains(tile))
+                                {
+                                    Rectangle rect = new Rectangle(
+                                        (int)drawPosition.X - this.DeltaTileDrawCoordinates.X, 
+                                        (int)drawPosition.Y - this.DeltaTileDrawCoordinates.Y, 
+                                        this.tileSize, 
+                                        this.tileSize);
+                                    
+                                    spriteBatch.Draw(this.highlightTexture, rect, Color.Goldenrod);
+                                }
+
                                 spriteBatch.DrawString(
                                     this.SpriteFont,
                                     this.currentMap[tile].DrawString,
@@ -259,7 +319,7 @@ namespace RLG.Framework
                                     this.LayerDepth);
                             }
                             break;
-                        #endregion
+                            #endregion
 
                         #region Sprites
                         case VisualMode.Sprites:
@@ -269,11 +329,11 @@ namespace RLG.Framework
                                 {
                                     this.currentMap[tile].PropertyFlags |= Flags.HasBeenSeen;
                                 }
-                             
+
                                 // Draw the Terrain first as it should exist for every Tile.
                                 terrainTexture = null;
                                 if (this.spriteDict.TryGetValue(
-                                    this.currentMap[tile].ObjectsContained.GetTerrain().DrawString,
+                                        this.currentMap[tile].ObjectsContained.GetTerrain().DrawString,
                                         out terrainTexture))
                                 {
                                     spriteBatch.Draw(terrainTexture, drawPosition);                                
@@ -302,7 +362,7 @@ namespace RLG.Framework
                                 // Draw actor
                                 actorTexture = null;
                                 if (this.spriteDict.TryGetValue(
-                                    this.currentMap[tile].ObjectsContained.GetActor().DrawString,
+                                        this.currentMap[tile].ObjectsContained.GetActor().DrawString,
                                         out actorTexture))
                                 {
                                     spriteBatch.Draw(actorTexture, drawPosition);
@@ -312,7 +372,7 @@ namespace RLG.Framework
                             {
                                 terrainTexture = null;
                                 if (this.spriteDict.TryGetValue(
-                                    this.currentMap[tile].ObjectsContained.GetTerrain().DrawString,
+                                        this.currentMap[tile].ObjectsContained.GetTerrain().DrawString,
                                         out terrainTexture))
                                 {
                                     spriteBatch.Draw(terrainTexture, drawPosition, VisualEngine.TileMask); 
@@ -322,31 +382,6 @@ namespace RLG.Framework
                             #endregion
                     }
                 }
-            }
-
-            spriteBatch.End();
-        }
-
-        public void DrawGrid(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
-        {
-            Texture2D simpleTexture = new Texture2D(graphicsDevice, 1, 1, false, SurfaceFormat.Color);
-            simpleTexture.SetData<Color>(new[] { Color.White });
-
-            spriteBatch.Begin();
-
-            int xEnd = this.MapDrawboxTileSize.X * this.tileSize;
-            int yEnd = this.MapDrawboxTileSize.Y * this.tileSize;
-
-            for (int x = this.LeftMargin; x <= xEnd + this.LeftMargin; x += this.tileSize)
-            {
-                Rectangle rect = new Rectangle(x, this.LeftMargin, 1, yEnd);
-                spriteBatch.Draw(simpleTexture, rect, Color.Wheat);
-            }
-
-            for (int y = this.TopMargin; y <= yEnd + this.TopMargin; y += this.tileSize)
-            {
-                Rectangle rect = new Rectangle(this.TopMargin, y, xEnd, 1);
-                spriteBatch.Draw(simpleTexture, rect, Color.Wheat);
             }
 
             spriteBatch.End();
