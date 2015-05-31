@@ -53,12 +53,6 @@ namespace RLG.Framework
             }
         }
 
-        public ITile this [Point indexPoint]
-        {
-            get { return this.currentMap.Tiles[indexPoint.X, indexPoint.Y]; }
-            set { this.currentMap.Tiles[indexPoint.X, indexPoint.Y] = value; }
-        }
-
         public IMap Map
         {
             get { return this.currentMap; }
@@ -233,16 +227,16 @@ namespace RLG.Framework
                         #region ASCII
                         case VisualMode.ASCII:
 
-                            if (this[tile].IsVisible)
+                            if (this.currentMap[tile].IsVisible)
                             {
-                                if (!this[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
+                                if (!this.currentMap[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
                                 {
-                                    this[tile].PropertyFlags |= Flags.HasBeenSeen;
+                                    this.currentMap[tile].PropertyFlags |= Flags.HasBeenSeen;
                                 }
 
                                 spriteBatch.DrawString(
                                     this.SpriteFont,
-                                    this[tile].DrawString,
+                                    this.currentMap[tile].DrawString,
                                     drawPosition, 
                                     this.ASCIIColor,
                                     this.ASCIIRotation,
@@ -251,11 +245,11 @@ namespace RLG.Framework
                                     this.ASCIIEffects,
                                     this.LayerDepth);
                             }
-                            else if (this[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
+                            else if (this.currentMap[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
                             {                                  
                                 spriteBatch.DrawString(
                                     this.SpriteFont, 
-                                    this[tile].DrawString,
+                                    this.currentMap[tile].DrawString,
                                     drawPosition,
                                     VisualEngine.TileMask,
                                     this.ASCIIRotation,
@@ -269,24 +263,24 @@ namespace RLG.Framework
 
                         #region Sprites
                         case VisualMode.Sprites:
-                            if (this[tile].IsVisible)
+                            if (this.currentMap[tile].IsVisible)
                             {
-                                if (!this[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
+                                if (!this.currentMap[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
                                 {
-                                    this[tile].PropertyFlags |= Flags.HasBeenSeen;
+                                    this.currentMap[tile].PropertyFlags |= Flags.HasBeenSeen;
                                 }
                              
                                 // Draw the Terrain first as it should exist for every Tile.
                                 terrainTexture = null;
                                 if (this.spriteDict.TryGetValue(
-                                        this[tile].ObjectsContained.GetTerrain().DrawString,
+                                    this.currentMap[tile].ObjectsContained.GetTerrain().DrawString,
                                         out terrainTexture))
                                 {
                                     spriteBatch.Draw(terrainTexture, drawPosition);                                
                                 }
 
                                 // Draw existing fringe objects
-                                foreach (var fringe in this[tile].ObjectsContained.GetFringes())
+                                foreach (var fringe in this.currentMap[tile].ObjectsContained.GetFringes())
                                 {
                                     fringeTexture = null;
                                     if (this.spriteDict.TryGetValue(fringe.DrawString, out fringeTexture))
@@ -296,7 +290,7 @@ namespace RLG.Framework
                                 }
 
                                 // Draw existing items
-                                foreach (var item in this[tile].ObjectsContained.GetItems())
+                                foreach (var item in this.currentMap[tile].ObjectsContained.GetItems())
                                 {
                                     itemTexture = null;
                                     if (this.spriteDict.TryGetValue(item.DrawString, out itemTexture))
@@ -308,17 +302,17 @@ namespace RLG.Framework
                                 // Draw actor
                                 actorTexture = null;
                                 if (this.spriteDict.TryGetValue(
-                                        this[tile].ObjectsContained.GetActor().DrawString,
+                                    this.currentMap[tile].ObjectsContained.GetActor().DrawString,
                                         out actorTexture))
                                 {
                                     spriteBatch.Draw(actorTexture, drawPosition);
                                 }   
                             }
-                            else if (this[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
+                            else if (this.currentMap[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
                             {
                                 terrainTexture = null;
                                 if (this.spriteDict.TryGetValue(
-                                        this[tile].ObjectsContained.GetTerrain().DrawString,
+                                    this.currentMap[tile].ObjectsContained.GetTerrain().DrawString,
                                         out terrainTexture))
                                 {
                                     spriteBatch.Draw(terrainTexture, drawPosition, VisualEngine.TileMask); 

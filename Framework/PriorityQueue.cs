@@ -1,5 +1,5 @@
 ﻿//
-//  ITile.cs
+//  PriorityQueue.cs
 //
 //  Author:
 //       scienide <alexandar921@abv.bg>
@@ -18,21 +18,15 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using System;
 
-namespace RLG.Contracts
+namespace Framework
 {
-    using RLG.Framework.FieldOfView;
-    using System.Collections.Generic;
-
-    public interface ITile : IFovCell, IGameObject
+    public class PriorityQueue
     {
-        IEnumerable<IGameObject> ObjectsContained { get; }
-
-        IEnumerable<ITile> Neighboors { get; set; }
-
-        bool AddObject(IGameObject gameObject);
-
-        bool RemoveObject(IGameObject gameObject);
+        public PriorityQueue()
+        {
+        }
     }
 }
 

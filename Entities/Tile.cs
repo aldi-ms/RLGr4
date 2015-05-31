@@ -30,7 +30,7 @@ namespace RLG.Entities
     {
         private string drawString;
         private List<IGameObject> objectsContained;
-        private Flags propertyFlags;
+        private Flags flags;
 
         public Tile(string drawString, Flags flags)
         {
@@ -42,11 +42,13 @@ namespace RLG.Entities
             }
 
             this.drawString = drawString;
-            this.propertyFlags |= flags;
+            this.flags |= flags;
             this.objectsContained = new List<IGameObject>();
         }
 
         #region Properties
+
+        public IEnumerable<ITile> Neighboors { get; set; }
 
         public string Name { get; set; }
 
@@ -62,7 +64,7 @@ namespace RLG.Entities
         {
             get
             {
-                Flags cumulativeFlags = this.propertyFlags;
+                Flags cumulativeFlags = this.flags;
 
                 foreach (var gameObject in this.ObjectsContained)
                 {
@@ -73,7 +75,7 @@ namespace RLG.Entities
             }
             set
             {
-                this.propertyFlags = value;
+                this.flags = value;
             }
         }
 

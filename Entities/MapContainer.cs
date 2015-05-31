@@ -23,6 +23,7 @@ namespace RLG.Entities
 {
     using Microsoft.Xna.Framework;
     using RLG.Contracts;
+    using RLG.Enumerations;
     using RLG.Framework;
 
     public class MapContainer : IMap
@@ -36,15 +37,15 @@ namespace RLG.Entities
 
         public FlatArray<ITile> Tiles { get; set; }
 
-        public ITile this[Point tileCoordinates]
+        public ITile this [Point tileCoordinates]
         {
             get
             {
-                throw new System.NotImplementedException();
+                return this.Tiles[tileCoordinates.X, tileCoordinates.Y];
             }
             set
             {
-                throw new System.NotImplementedException();
+                this.Tiles[tileCoordinates.X, tileCoordinates.Y] = value;
             }
         }
 
@@ -52,7 +53,13 @@ namespace RLG.Entities
 
         public bool CheckTile(Point tileCoordinates, out string blockingObject)
         {
-            throw new System.NotImplementedException();
+            blockingObject = string.Empty;
+            if (tileCoordinates.X > this.Tiles.Width || tileCoordinates.X < 0
+                || tileCoordinates.Y > this.Tiles.Height || tileCoordinates.Y < 0)
+            {
+                return false;
+            }
+            return !this[tileCoordinates].PropertyFlags.HasFlag(Flags.IsBlocked);
         }
     }
 }

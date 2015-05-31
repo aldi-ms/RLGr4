@@ -42,6 +42,9 @@
     <Reference Include="Tao.Sdl">
       <HintPath>..\packages\MonoGame.Framework.Linux.3.3.0.0\lib\net40\Tao.Sdl.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +84,8 @@
     <Compile Include="Entities\Actor.cs" />
     <Compile Include="Contracts\IPropertyBag.cs" />
     <Compile Include="Entities\PropertyBag.cs" />
+    <Compile Include="Framework\ActorPriorityQueue.cs" />
+    <Compile Include="Framework\PriorityQueue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

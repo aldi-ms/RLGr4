@@ -93,14 +93,15 @@ namespace RLG
             #region Temporary code
 
             // Create a map for testing purposes
-            Point size = new Point(10, 10);
+            Point size = new Point(20, 20);
             MapContainer map = new MapContainer(
-                MapUtilities.GenerateRandomMap(size, VisualMode.ASCII));
+                                   MapUtilities.GenerateRandomMap(size, VisualMode.ASCII));
+            map.LoadTileNeighboors();
 
             this.visualEngine = new VisualEngine(
                 VisualMode.ASCII,
                 32,
-                size,
+                new Point(10, 10),
                 map,
                 null,
                 ASCIIGraphicsFont);
@@ -112,9 +113,9 @@ namespace RLG
 
             Rectangle logRect = new Rectangle(
                                     0,
-                                    map.Tiles.Height * this.visualEngine.TileSize,
+                                    visualEngine.MapDrawboxTileSize.X * this.visualEngine.TileSize,
                                     ScreenWidth - 30,
-                                    (ScreenHeight - 30) - map.Tiles.Height * this.visualEngine.TileSize);
+                                    (ScreenHeight - 30) - visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize);
             
             this.messageLog = new MessageLog(logRect, this.logFont);
         }
@@ -133,7 +134,7 @@ namespace RLG
             Keys key = this.keyboardBuffer.Dequeue();
 
             // Process the key
-            switch (key) 
+            switch (key)
             {
                 case Keys.Escape:
                     Exit();
@@ -151,7 +152,7 @@ namespace RLG
         {
             graphics.GraphicsDevice.Clear(Color.Black);
 
-            this.visualEngine.DrawGame(this.spriteBatch, new Point(3,3));
+            this.visualEngine.DrawGame(this.spriteBatch, new Point(3, 3));
             this.visualEngine.DrawGrid(this.GraphicsDevice, this.spriteBatch);
             this.messageLog.DrawLog(this.spriteBatch);
 

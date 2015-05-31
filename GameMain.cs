@@ -1,13 +1,4 @@
-﻿#region Using Statements
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using RLG.Contracts;
-using RLG.Enumerations;
-using RLG.Framework;
-using RLG.Utilities;
-
-#if MONOMAC
+﻿#if MONOMAC
 using MonoMac.AppKit;
 using MonoMac.Foundation;
 
@@ -15,14 +6,32 @@ using MonoMac.Foundation;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 #endif
-#endregion
+using System.IO;
 
 namespace RLG
 {
+    #region Using Statements
+
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Linq;
+
+    using Newtonsoft.Json;
+    using RLG.Contracts;
+    using RLG.Entities;
+    using RLG.Enumerations;
+    using RLG.Framework;
+    using RLG.Utilities;
+
+    #endregion
+
     #if __IOS__
 	[Register("AppDelegate")]
 	class Program : UIApplicationDelegate
 	
+
 #else
     static class GameMain
 	#endif
@@ -53,10 +62,20 @@ namespace RLG
             #elif __IOS__
 			UIApplication.Main(args, null, "AppDelegate");
             #else
-            if (true) {
+            if (true)
+            {
                 RunGame();
-            } else {
+            }
+            else
+            {
                 // Testing
+                Actor actor = new Actor("scienide", new PropertyBag());
+                actor.Properties["intellect"] = 10;
+                actor.Volume = 85;
+
+                string serializedOutput = JsonConvert.SerializeObject(actor);
+
+                Actor deserialized = JsonConvert.DeserializeObject<Actor>(serializedOutput);
             }
             #endif
         }
@@ -67,7 +86,7 @@ namespace RLG
 			RunGame();
 		}
         #endif
-        public static void Testing() 
+        public static void Testing()
         {
             throw new NotImplementedException();
         }

@@ -22,6 +22,8 @@
 namespace RLG.Utilities
 {
     using Microsoft.Xna.Framework;
+    using System;
+    using System.Collections.Generic;
     using RLG.Contracts;
     using RLG.Enumerations;
     using RLG.Entities;
@@ -29,7 +31,19 @@ namespace RLG.Utilities
 
     public static class MapUtilities
     {
-        private static System.Random RNG = new System.Random();
+        private static readonly Point[] directions = new Point[]
+        {
+            new Point(-1, -1),
+            new Point(-1, 1),
+            new Point(-1, 0),
+            new Point(0, -1),
+            new Point(0, 1),
+            new Point(1, -1),
+            new Point(1, 0),
+            new Point(1, 1)
+        };
+        
+        private static Random RNG = new Random();
 
         public static FlatArray<ITile> GenerateRandomMap(Point size, VisualMode mode)
         {
@@ -64,6 +78,34 @@ namespace RLG.Utilities
             }
 
             return resultTiles;
+        }
+
+        public static void LoadTileNeighboors(this IMap map)
+        {
+            for (int x = 0; x < map.Tiles.Width - 1; x++)
+            {
+                for (int y = 0; y < map.Tiles.Height - 1; y++)
+                {
+                    Point currentPosition = new Point(x, y);
+
+                    string str;
+                    if (map.CheckTile(currentPosition, out str))
+                    {
+                        List<ITile> neighboors = new List<ITile>();
+                        foreach (var dir in directions)
+                        {
+                            Point newPosition = currentPosition + dir;
+
+                            if (map.CheckTile(newPosition, out str))
+                            {
+                                neighboors.Add(map[newPosition]);
+                            }
+                        }
+
+                        map[currentPosition].Neighboors = neighboors;
+                    }
+                }
+            }
         }
     }
 }

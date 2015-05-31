@@ -27,6 +27,7 @@ namespace RLG.Entities
     using RLG.Enumerations;
     using RLG.Utilities;
 
+    [Serializable]
     public class Actor : IActor
     {
         private byte volume;
@@ -34,29 +35,35 @@ namespace RLG.Entities
 
         #region Constructors
 
-        public Actor(string name, IPropertyBag statistics, IMap map, byte volume)
-        { 
+        public Actor(string name, IPropertyBag properties, IMap map, byte volume)
+        {
             this.Name = name;
-            this.Properties = statistics;
+            this.Properties = properties;
             this.CurrentMap = map;
 
             this.Volume = volume;
+
+            // Default properties to set
+            this.Properties["speed"] = 10;
         }
 
-        public Actor(string name, IPropertyBag statistics, IMap map)
-            : this(name, statistics, map, 100)
+        public Actor(string name, IPropertyBag properties, IMap map)
+            : this(name, properties, map, 100)
         {
         }
 
-        public Actor(string name, IPropertyBag statistics)
-            : this(name, statistics, null, 100)
+        public Actor(string name, IPropertyBag properties)
+            : this(name, properties, null, 100)
         {
         }
 
+        public Actor() {}
         #endregion
 
         #region Properties
 
+        //TO DO: Implement getters and setters to check values
+     
         public string Name { get; set; }
 
         public Point Position { get; set; }
