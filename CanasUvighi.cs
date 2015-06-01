@@ -46,12 +46,16 @@ namespace RLG
 
         private const int ScreenWidth = 800;
         private const int ScreenHeight = 500;
+        private const int MinTurnCost = 100;
 
+        private bool expectCommand = false;
         private VisualEngine visualEngine;
         private SpriteFont ASCIIGraphicsFont;
         private SpriteFont logFont;
         private IMessageLog messageLog;
         private KeyboardBuffer keyboardBuffer;
+        private ActorPriorityQueue actorQueue;
+        private IActor actor;
 
         public CanasUvighi()
         {
@@ -76,6 +80,7 @@ namespace RLG
             this.graphics.ApplyChanges();
             this.IsMouseVisible = true;
 
+            this.actorQueue = new ActorPriorityQueue();
             this.keyboardBuffer = new KeyboardBuffer();
 
             base.Initialize();
@@ -103,33 +108,30 @@ namespace RLG
             this.visualEngine = new VisualEngine(
                 VisualMode.ASCII,
                 32,
-                new Point(10, 10),
+                new Point(16, 11),
                 map,
                 null,
                 ASCIIGraphicsFont);
-            this.visualEngine.DeltaTileDrawCoordinates = new Point(4, -4);
+            this.visualEngine.DeltaTileDrawCoordinates = new Point(4, -6);
             this.visualEngine.ASCIIScale = 0.7f;
-
-            #endregion
-
 
             Rectangle logRect = new Rectangle(
                                     0,
-                                    visualEngine.MapDrawboxTileSize.X * this.visualEngine.TileSize,
+                                    visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize,
                                     ScreenWidth - 30,
                                     (ScreenHeight - 30) - visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize);
             
             this.messageLog = new MessageLog(logRect, this.logFont);
-            var path = map.GetShortestPath(map[new Point(0, 0)], map[new Point(16, 16)]);
-            this.visualEngine.HighlightPath(path);
-            if (path == null)
-            {
-                this.messageLog.SendMessage("no path exists to 16, 16");
-            }
 
-            IActor actor = new Actor("SCiENiDE", new PropertyBag(), map, 85);
-            actor.Position = new Point();
-            map[actor.Position].AddObject(actor);            
+
+            this.actor = new Actor("SCiENiDE", new PropertyBag(), map, 85);
+            this.actor.Position = new Point();
+            this.actor.PropertyFlags |= Flags.IsPlayerControl;
+            map[this.actor.Position].AddObject(this.actor);
+            this.actorQueue.Add(this.actor);
+
+
+            #endregion
         }
 
         /// <summary>
@@ -151,11 +153,123 @@ namespace RLG
                 case Keys.Escape:
                     Exit();
                     break;
-                case Keys.Up:
+
+                default:
+                    this.keyboardBuffer.Enqueue(key);
                     break;
             }
 
+            if (!expectCommand)
+            {
+                actorQueue.AccumulateEnergy();
+            }
+
+            for (int x = 0; x < actorQueue.Count; x++)
+            {
+                IActor current = actorQueue[x];
+                if (current.Properties["energy"] >= MinTurnCost)
+                {
+                    this.expectCommand = true;
+
+                    switch (this.keyboardBuffer.Dequeue())
+                    {
+                        #region Energy-dependent keyboard input
+                        case Keys.NumPad8:
+                        case Keys.K:
+                        case Keys.Up:
+                            {
+                                current.Properties["energy"] -= current.Move(CardinalDirection.North);
+                                this.expectCommand = false;
+                                this.OnMove(current);
+                                break;
+                            }
+
+                        case Keys.NumPad2:
+                        case Keys.J:
+                        case Keys.Down:
+                            {
+                                current.Properties["energy"] -= current.Move(CardinalDirection.South);
+                                this.expectCommand = false;
+                                this.OnMove(current);
+                                break;
+                            }
+
+                        case Keys.NumPad4:
+                        case Keys.H:
+                        case Keys.Left:
+                            {
+                                current.Properties["energy"] -= current.Move(CardinalDirection.West);
+                                this.expectCommand = false;
+                                this.OnMove(current);
+                                break;
+                            }
+
+                        case Keys.NumPad6:
+                        case Keys.L:
+                        case Keys.Right:
+                            {
+                                current.Properties["energy"] -= current.Move(CardinalDirection.East);
+                                this.expectCommand = false;
+                                this.OnMove(current);
+                                break;
+                            }
+
+                        case Keys.NumPad7:
+                        case Keys.Y:
+                            {
+                                current.Properties["energy"] -= current.Move(CardinalDirection.NorthWest);
+                                this.expectCommand = false;
+                                this.OnMove(current);
+                                break;
+                            }
+
+                        case Keys.NumPad9:
+                        case Keys.U:
+                            {
+                                current.Properties["energy"] -= current.Move(CardinalDirection.NorthEast);
+                                this.expectCommand = false;
+                                this.OnMove(current);
+                                break;
+                            }
+
+                        case Keys.NumPad1:
+                        case Keys.B:
+                            {
+                                current.Properties["energy"] -= current.Move(CardinalDirection.SouthWest);
+                                this.expectCommand = false;
+                                this.OnMove(current);
+                                break;
+                            }
+
+                        case Keys.NumPad3:
+                        case Keys.N:
+                            {
+                                current.Properties["energy"] -= current.Move(CardinalDirection.SouthEast);
+                                this.expectCommand = false;
+                                this.OnMove(current);
+                                break;
+                            }
+
+                        default:
+                            break;
+                            #endregion
+                    }
+                }
+            }
+
             base.Update(gameTime);
+        }
+
+        protected void OnMove(IActor actor)
+        {
+            this.messageLog.SendMessage(string.Format("player: [{0},{1}]", actor.Position.X, actor.Position.Y));
+
+            var path = actor.GetPathTo(actor.CurrentMap[new Point(16, 16)]);
+            this.visualEngine.HighlightPath(path);
+            if (path == null)
+            {
+                this.messageLog.SendMessage("no path exists to 16, 16");
+            }
         }
 
         /// <summary>
@@ -166,8 +280,8 @@ namespace RLG
         {
             graphics.GraphicsDevice.Clear(Color.Black);
 
-            this.visualEngine.DrawGame(this.spriteBatch, new Point(3, 3));
-            this.visualEngine.DrawGrid(this.GraphicsDevice, this.spriteBatch);
+            this.visualEngine.DrawGame(this.spriteBatch, this.actor.Position);
+            //this.visualEngine.DrawGrid(this.GraphicsDevice, this.spriteBatch);
             this.messageLog.DrawLog(this.spriteBatch);
 
             base.Draw(gameTime);

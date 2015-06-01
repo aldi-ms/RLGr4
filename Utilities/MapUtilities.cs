@@ -52,13 +52,12 @@ namespace RLG.Utilities
             switch (mode)
             {
                 case VisualMode.ASCII:
-                    // Testing foreach on FlatArray<T>
                     for (int i = 0; i < size.X; i++)
                     {
                         for (int j = 0; j < size.Y; j++)
                         {
                             int val = RNG.Next(0, 100);
-                            if (val > 80)
+                            if (val > 70)
                             {
                                 // blocked tile
                                 Flags flags = Flags.IsBlocked;

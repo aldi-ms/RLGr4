@@ -47,7 +47,7 @@ namespace RLG.Contracts
         /// Move the actor in the specified direction on the map.
         /// </summary>
         /// <param name="direction">Direction.</param>
-        int Move(CardinalDirection direction);
+        uint Move(CardinalDirection direction);
     }
 }
 

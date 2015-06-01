@@ -31,7 +31,7 @@ namespace RLG.Entities
 
         #region ITerrain implementation
 
-        public int MoveCost
+        public uint MoveCost
         {
             get
             {

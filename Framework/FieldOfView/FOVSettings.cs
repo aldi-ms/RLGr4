@@ -54,7 +54,7 @@ namespace RLG.Framework.FieldOfView
         #endregion
 
         public FOVSettings(
-            int maxRange = 5, 
+            int maxRange = 4, 
             bool lightWalls = true,
             FOVMethod method = FOVMethod.MRPAS,
             RangeLimitShape shape = RangeLimitShape.Circle)

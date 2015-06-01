@@ -29,6 +29,11 @@ namespace RLG.Entities
 
     public class ActorPriorityQueue : PriorityQueue<IActor>
     {
+        public IActor this [int index]
+        {
+            get { return base.Queue[index]; }
+        }
+
         /// <summary>
         /// Sums all Actors' energy with their speed.
         /// </summary>

@@ -44,7 +44,62 @@ namespace RLG.Framework
         private FieldOfView<ITile> fieldOfView;
         private ContentManager content;
 
-        private static readonly Color TileMask = Color.Gray;
+        private static readonly Color TileMask = Color.DarkSlateGray;
+
+        public VisualEngine(
+            VisualMode mode, 
+            int tileSize,
+            Point mapDrawboxTileSize,
+            IMap map, 
+            ContentManager content = null,
+            SpriteFont spriteFont = null)
+        {
+            this.mode = mode;
+            this.tileSize = tileSize;
+            this.MapDrawboxTileSize = mapDrawboxTileSize;
+            this.Map = map;
+            this.FOVSettings = new FOVSettings();
+
+            // Set defaults
+            this.TopMargin = 10;
+            this.LeftMargin = 10;
+            this.spriteDict = new Dictionary<string, Texture2D>();
+            this.DeltaTileDrawCoordinates = new Point(0, 0);
+            this.highlighterIsOn = false;
+            this.tilesToHighlight = new List<Point>();
+
+            this.ASCIIColor = Color.White;
+            this.ASCIIRotation = 0f;
+            this.ASCIIScale = 1f;
+            this.ASCIIOrigin = new Vector2(0, 0);
+            this.ASCIIEffects = SpriteEffects.None;
+            this.LayerDepth = 0f;
+
+            switch (mode)
+            {
+                case VisualMode.ASCII:
+                    if (spriteFont == null)
+                    {
+                        throw new ArgumentNullException(
+                            "spriteFont",
+                            "SpriteFont should be supplied to the constructor if ASCII mode is to be used.");
+                    }
+
+                    this.SpriteFont = spriteFont;
+                    break;
+
+                case VisualMode.Sprites:
+                    if (content == null)
+                    {
+                        throw new ArgumentNullException(
+                            "content",
+                            "ContentManager should be supplied to the constructor if Tiles mode is to be used.");
+                    }
+
+                    this.content = content;
+                    break;
+            }
+        }
 
         #region Properties
 
@@ -108,61 +163,6 @@ namespace RLG.Framework
         public float LayerDepth { get; set; }
 
         #endregion
-
-        public VisualEngine(
-            VisualMode mode, 
-            int tileSize,
-            Point mapDrawboxTileSize,
-            IMap map, 
-            ContentManager content = null,
-            SpriteFont spriteFont = null)
-        {
-            this.mode = mode;
-            this.tileSize = tileSize;
-            this.MapDrawboxTileSize = mapDrawboxTileSize;
-            this.Map = map;
-            this.FOVSettings = new FOVSettings();
-
-            // Set defaults
-            this.TopMargin = 10;
-            this.LeftMargin = 10;
-            this.spriteDict = new Dictionary<string, Texture2D>();
-            this.DeltaTileDrawCoordinates = new Point(0, 0);
-            this.highlighterIsOn = false;
-            this.tilesToHighlight = new List<Point>();
-
-            this.ASCIIColor = Color.White;
-            this.ASCIIRotation = 0f;
-            this.ASCIIScale = 1f;
-            this.ASCIIOrigin = new Vector2(0, 0);
-            this.ASCIIEffects = SpriteEffects.None;
-            this.LayerDepth = 0f;
-
-            switch (mode)
-            {
-                case VisualMode.ASCII:
-                    if (spriteFont == null)
-                    {
-                        throw new ArgumentNullException(
-                            "spriteFont",
-                            "SpriteFont should be supplied to the constructor if ASCII mode is to be used.");
-                    }
-
-                    this.SpriteFont = spriteFont;
-                    break;
-
-                case VisualMode.Sprites:
-                    if (content == null)
-                    {
-                        throw new ArgumentNullException(
-                            "content",
-                            "ContentManager should be supplied to the constructor if Tiles mode is to be used.");
-                    }
-
-                    this.content = content;
-                    break;
-            }
-        }
 
         public void DrawGame(SpriteBatch spriteBatch, Point mapCenter)
         {

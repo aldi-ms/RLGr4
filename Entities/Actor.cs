@@ -113,7 +113,7 @@ namespace RLG.Entities
 
         #endregion
 
-        public int Move(CardinalDirection direction)
+        public uint Move(CardinalDirection direction)
         {
             if (this.CurrentMap == null)
             {
@@ -131,7 +131,7 @@ namespace RLG.Entities
                 this.CurrentMap[newPosition].AddObject(this);
                 this.Position = newPosition;
 
-                return this.CurrentMap[newPosition].ObjectsContained.GetTerrain().MoveCost;
+                return 20;//this.CurrentMap[newPosition].ObjectsContained.GetTerrain().MoveCost;
             }
             else
             {

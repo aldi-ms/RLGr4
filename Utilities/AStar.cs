@@ -29,7 +29,7 @@ namespace RLG.Utilities
 
     public static class AStar
     {
-        public static List<Point> GetShortestPath(this IMap map, ITile start, ITile goal)
+        public static List<Point> GetPathTo(this IActor actor, ITile goal)
         {
             List<ITile> closedSet = new List<ITile>();
             List<ITile> openSet = new List<ITile>();
@@ -37,6 +37,7 @@ namespace RLG.Utilities
             Dictionary<ITile, int> gScore = new Dictionary<ITile, int>();
             Dictionary<ITile, int> fScore = new Dictionary<ITile, int>();
 
+            ITile start = actor.CurrentMap[actor.Position];
             openSet.Add(start);
             cameFrom[start] = null;
             gScore[start] = 0;
@@ -53,6 +54,11 @@ namespace RLG.Utilities
 
                 openSet.Remove(current);
                 closedSet.Add(current);
+
+                if (current.Neighboors == null)
+                {
+                    return null;
+                }
 
                 foreach (var neighboor in current.Neighboors)
                 {
@@ -80,10 +86,13 @@ namespace RLG.Utilities
             return null;    
         }
 
-        private static int HeuristicCostEstimate(ITile start, ITile goal)
+        private static int HeuristicCostEstimate(ITile current, ITile goal)
         {
-            // 0 makes the A* algorithm actually Dijkstra's.
-            return 0;
+            
+            // Diagonal distance (a.k.a. Chebyshev distance)
+            int dx = Math.Abs(current.Position.X - goal.Position.X);
+            int dy = Math.Abs(current.Position.Y - goal.Position.Y);
+            return Math.Max(dx, dy);
         }
 
         private static List<Point> ReconstructPath(Dictionary<ITile, ITile> cameFrom, ITile start, ITile goal)
