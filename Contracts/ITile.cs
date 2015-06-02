@@ -24,14 +24,19 @@ namespace RLG.Contracts
     using Microsoft.Xna.Framework;
     using System.Collections.Generic;
     using RLG.Framework.FieldOfView;
+    using RLG.Enumerations;
 
-    public interface ITile : IFovCell, IGameObject
+    public interface ITile : IFovCell, IDrawable
     {
         IEnumerable<IGameObject> ObjectsContained { get; }
 
         IEnumerable<ITile> Neighboors { get; set; }
 
         Point Position { get; }
+
+        Flags Flags { get; set; }
+
+        byte Volume { get; }
 
         bool AddObject(IGameObject gameObject);
 

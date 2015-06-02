@@ -278,9 +278,9 @@ namespace RLG.Framework
 
                             if (this.currentMap[tile].IsVisible)
                             {
-                                if (!this.currentMap[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
+                                if (!this.currentMap[tile].Flags.HasFlag(Flags.HasBeenSeen))
                                 {
-                                    this.currentMap[tile].PropertyFlags |= Flags.HasBeenSeen;
+                                    this.currentMap[tile].Flags |= Flags.HasBeenSeen;
                                 }
 
                                 if (this.highlighterIsOn && this.tilesToHighlight.Contains(tile))
@@ -305,7 +305,7 @@ namespace RLG.Framework
                                     this.ASCIIEffects,
                                     this.LayerDepth);
                             }
-                            else if (this.currentMap[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
+                            else if (this.currentMap[tile].Flags.HasFlag(Flags.HasBeenSeen))
                             {                                  
                                 spriteBatch.DrawString(
                                     this.SpriteFont, 
@@ -325,9 +325,9 @@ namespace RLG.Framework
                         case VisualMode.Sprites:
                             if (this.currentMap[tile].IsVisible)
                             {
-                                if (!this.currentMap[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
+                                if (!this.currentMap[tile].Flags.HasFlag(Flags.HasBeenSeen))
                                 {
-                                    this.currentMap[tile].PropertyFlags |= Flags.HasBeenSeen;
+                                    this.currentMap[tile].Flags |= Flags.HasBeenSeen;
                                 }
 
                                 // Draw the Terrain first as it should exist for every Tile.
@@ -368,7 +368,7 @@ namespace RLG.Framework
                                     spriteBatch.Draw(actorTexture, drawPosition);
                                 }   
                             }
-                            else if (this.currentMap[tile].PropertyFlags.HasFlag(Flags.HasBeenSeen))
+                            else if (this.currentMap[tile].Flags.HasFlag(Flags.HasBeenSeen))
                             {
                                 terrainTexture = null;
                                 if (this.spriteDict.TryGetValue(

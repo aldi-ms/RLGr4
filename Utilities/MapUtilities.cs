@@ -49,6 +49,9 @@ namespace RLG.Utilities
         {
             FlatArray<ITile> resultTiles = new FlatArray<ITile>(size.X, size.Y);
 
+            Terrain grass = new Terrain("grass", ",", 1,Flags.IsTransparent);
+            Terrain wall = new Terrain("wall", "#", Tile.TileVolume, Flags.IsBlocked);
+
             switch (mode)
             {
                 case VisualMode.ASCII:
@@ -59,15 +62,12 @@ namespace RLG.Utilities
                             int val = RNG.Next(0, 100);
                             if (val > 70)
                             {
-                                // blocked tile
-                                Flags flags = Flags.IsBlocked;
                                 // implement terrain
-                                resultTiles[i, j] = new Tile("#", flags, new Point(i, j));
+                                resultTiles[i, j] = new Tile(new Point(i , j), wall);
                             }
                             else
                             {
-                                Flags flags = Flags.IsTransparent;
-                                resultTiles[i, j] = new Tile(".", flags, new Point(i, j));
+                                resultTiles[i, j] = new Tile(new Point(i, j), grass);
                             }
                         }
                     }

@@ -27,89 +27,36 @@ namespace RLG.Entities
     using RLG.Enumerations;
     using RLG.Utilities;
 
-    [Serializable]
-    public class Actor : IActor
+    public class Actor : GameObject, IActor
     {
-        private byte volume;
-        private string drawString;
-
         #region Constructors
 
-        public Actor(string name, IPropertyBag properties, IMap map, byte volume)
+        public Actor(string name, string drawStr, IPropertyBag properties, IMap map, Flags flags, byte volume)
+            : base(name, drawStr, volume, flags)
         {
-            this.Name = name;
             this.Properties = properties;
             this.CurrentMap = map;
-
-            this.Volume = volume;
 
             // Default properties to set
             this.Properties["speed"] = 10;
         }
 
-        public Actor(string name, IPropertyBag properties, IMap map)
-            : this(name, properties, map, 100)
+        public Actor(string name, string drawStr, byte volume)
+            : this(name, drawStr, null, null, new Flags(), volume)
         {
         }
 
-        public Actor(string name, IPropertyBag properties)
-            : this(name, properties, null, 100)
-        {
-        }
-
-        public Actor() {}
         #endregion
 
         #region Properties
 
         //TO DO: Implement getters and setters to check values
      
-        public string Name { get; set; }
-
         public Point Position { get; set; }
 
         public IMap CurrentMap { get; set; }
 
         public IPropertyBag Properties { get; set; }
-
-        public Flags PropertyFlags { get; set; }
-
-        public string DrawString
-        {
-            get
-            {
-                return "@";
-                return this.drawString;
-            }
-            set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException(
-                        "drawString", 
-                        "Actor drawString cannot be null!");
-                }
-
-                this.drawString = value;
-            }
-        }
-
-        public byte Volume
-        {
-            get
-            {
-                return this.volume;
-            }
-            set
-            {
-                if (value > 100)
-                {
-                    throw new ArgumentException("Actor.Volume cannot be > 100!");
-                }
-
-                this.volume = value;
-            }
-        }
 
         #endregion
 
@@ -119,7 +66,7 @@ namespace RLG.Entities
             {
                 throw new ArgumentNullException(
                     "map",
-                    "When calling Move() method on an IActor, IActor.Map cannot be null!");
+                    "When calling Move() on an IActor, IActor.Map cannot be null!");
             }
 
             Point newPosition = this.Position + direction.GetDeltaCoordinate();
@@ -131,7 +78,7 @@ namespace RLG.Entities
                 this.CurrentMap[newPosition].AddObject(this);
                 this.Position = newPosition;
 
-                return 20;//this.CurrentMap[newPosition].ObjectsContained.GetTerrain().MoveCost;
+                return this.CurrentMap[this.Position].Volume;
             }
             else
             {

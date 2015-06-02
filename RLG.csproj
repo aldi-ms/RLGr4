@@ -51,7 +51,6 @@
     <Compile Include="GameMain.cs" />
     <Compile Include="Framework\FlatArray.cs" />
     <Compile Include="Contracts\ITile.cs" />
-    <Compile Include="Contracts\ITileContainable.cs" />
     <Compile Include="Contracts\IGameObject.cs" />
     <Compile Include="Contracts\IDrawable.cs" />
     <Compile Include="Contracts\IMap.cs" />
@@ -88,6 +87,7 @@
     <Compile Include="Entities\ActorPriorityQueue.cs" />
     <Compile Include="Utilities\AStar.cs" />
     <Compile Include="Entities\Terrain.cs" />
+    <Compile Include="Entities\GameObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

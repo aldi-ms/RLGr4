@@ -22,80 +22,19 @@
 namespace RLG.Entities
 {
     using RLG.Contracts;
+    using RLG.Enumerations;
 
-    public class Terrain : ITerrain
+    public class Terrain : GameObject, ITerrain
     {
-        public Terrain(int moveCost, string drawString)
+        public Terrain(string name, string drawString, byte moveCost)
+            : base(name, drawString, moveCost)
         {
         }
 
-        #region ITerrain implementation
-
-        public uint MoveCost
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
+        public Terrain(string name, string drawString, byte moveCost, Flags flags)
+            : base(name, drawString, moveCost, flags)
+        {            
         }
-
-        #endregion
-
-        #region IGameObject implementation
-
-        public string Name
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        public RLG.Enumerations.Flags PropertyFlags
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        public byte Volume
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        #endregion
-
-        #region IDrawable implementation
-
-        public string DrawString
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        #endregion
     }
 }
 

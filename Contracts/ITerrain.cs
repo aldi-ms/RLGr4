@@ -23,7 +23,6 @@ namespace RLG.Contracts
 {
     public interface ITerrain : IGameObject
     {
-        uint MoveCost { get; }
     }
 }
 

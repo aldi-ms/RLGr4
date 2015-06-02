@@ -24,29 +24,32 @@ namespace RLG.Entities
     using Microsoft.Xna.Framework;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using RLG.Contracts;
     using RLG.Enumerations;
     using RLG.Utilities;
 
     public class Tile : ITile
     {
-        private string drawString;
+        public const byte TileVolume = 125;
         private List<IGameObject> objectsContained;
         private Flags flags;
 
-        public Tile(string drawString, Flags flags, Point position)
+        public Tile(Point position)
         {
-            if (string.IsNullOrEmpty(drawString))
+            this.Position = position;
+            this.objectsContained = new List<IGameObject>();
+            this.flags = new Flags();
+        }
+
+        public Tile(Point position, params IGameObject[] objectsToFill)
+            : this(position)
+        {
+            foreach (IGameObject gameObject in objectsToFill)
             {
-                throw new System.ArgumentNullException(
-                    "drawString",
-                    "Tile drawString cannot be null or empty string!");
+                this.AddObject(gameObject);
             }
 
-            this.Position = position;
-            this.drawString = drawString;
-            this.flags |= flags;
-            this.objectsContained = new List<IGameObject>();
         }
 
         #region Properties
@@ -54,8 +57,6 @@ namespace RLG.Entities
         public Point Position { get; private set; }
 
         public IEnumerable<ITile> Neighboors { get; set; }
-
-        public string Name { get; set; }
 
         public IEnumerable<IGameObject> ObjectsContained
         {
@@ -65,15 +66,15 @@ namespace RLG.Entities
             }
         }
 
-        public Flags PropertyFlags
+        public Flags Flags
         {
             get
             {
-                Flags cumulativeFlags = this.flags;
+                Flags cumulativeFlags = flags;
 
                 foreach (var gameObject in this.ObjectsContained)
                 {
-                    cumulativeFlags |= gameObject.PropertyFlags;
+                    cumulativeFlags |= gameObject.Flags;
                 }
 
                 return cumulativeFlags;
@@ -81,30 +82,6 @@ namespace RLG.Entities
             set
             {
                 this.flags = value;
-            }
-        }
-
-        public string DrawString
-        {
-            get
-            {
-                var actor = this.ObjectsContained.GetActor();
-                if (actor != null)
-                {
-                    return actor.DrawString;
-                }
-                return this.drawString;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(
-                        "drawString", 
-                        "Tile.DrawString cannot be null!");
-                }
-
-                this.drawString = value;
             }
         }
 
@@ -129,7 +106,7 @@ namespace RLG.Entities
         {
             get
             {
-                return this.PropertyFlags.HasFlag(Flags.IsTransparent);
+                return this.Flags.HasFlag(Flags.IsTransparent);
             }
         }
 
@@ -137,18 +114,38 @@ namespace RLG.Entities
         {
             get
             {
-                return this.PropertyFlags.HasFlag(Flags.IsVisible); 
+                return this.Flags.HasFlag(Flags.IsVisible); 
             }
             set
             {
                 if (value)
                 {
-                    this.PropertyFlags |= Flags.IsVisible;
+                    this.Flags |= Flags.IsVisible;
                 }
                 else
                 {
-                    this.PropertyFlags &= ~Flags.IsVisible;
+                    this.Flags &= ~Flags.IsVisible;
                 }
+            }
+        }
+
+        public string DrawString
+        {
+            get
+            {
+                IActor tileActor = this.ObjectsContained.GetActor();
+                if (tileActor != null)
+                {
+                    return tileActor.DrawString;
+                }
+
+                return this.ObjectsContained
+                    .OrderByDescending(x => x.Volume)
+                    .FirstOrDefault()
+                    .DrawString;
+            }
+            set
+            {
             }
         }
 
@@ -165,7 +162,7 @@ namespace RLG.Entities
 
             // Volume check. Each Tile has 100 volume available, and each object
             // has a volume property.
-            if (this.Volume + gameObject.Volume > 100)
+            if (this.Volume + gameObject.Volume > Tile.TileVolume)
             {
                 return false;
             }
@@ -183,7 +180,7 @@ namespace RLG.Entities
                     "gameObject",
                     "On removing game object from a tile, the object cannot be null!");
             }
-
+            this.flags = new Flags();
             return this.objectsContained.Remove(gameObject);
         }
     }

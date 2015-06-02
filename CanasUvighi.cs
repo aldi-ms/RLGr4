@@ -123,13 +123,17 @@ namespace RLG
             
             this.messageLog = new MessageLog(logRect, this.logFont);
 
-
-            this.actor = new Actor("SCiENiDE", new PropertyBag(), map, 85);
+            this.actor = new Actor(
+                "SCiENiDE",
+                "@",
+                new PropertyBag(),
+                map, 
+                Flags.IsPlayerControl | Flags.IsBlocked,
+                85);
+            
             this.actor.Position = new Point();
-            this.actor.PropertyFlags |= Flags.IsPlayerControl;
             map[this.actor.Position].AddObject(this.actor);
             this.actorQueue.Add(this.actor);
-
 
             #endregion
         }
@@ -169,90 +173,95 @@ namespace RLG
                 IActor current = actorQueue[x];
                 if (current.Properties["energy"] >= MinTurnCost)
                 {
-                    this.expectCommand = true;
-
-                    switch (this.keyboardBuffer.Dequeue())
+                    if (current.Flags.HasFlag(Flags.IsPlayerControl))
                     {
+                        this.expectCommand = true;
+
+                        switch (this.keyboardBuffer.Dequeue())
+                        {
                         #region Energy-dependent keyboard input
-                        case Keys.NumPad8:
-                        case Keys.K:
-                        case Keys.Up:
-                            {
-                                current.Properties["energy"] -= current.Move(CardinalDirection.North);
-                                this.expectCommand = false;
-                                this.OnMove(current);
-                                break;
-                            }
 
-                        case Keys.NumPad2:
-                        case Keys.J:
-                        case Keys.Down:
-                            {
-                                current.Properties["energy"] -= current.Move(CardinalDirection.South);
-                                this.expectCommand = false;
-                                this.OnMove(current);
-                                break;
-                            }
+                            case Keys.NumPad8:
+                            case Keys.K:
+                            case Keys.Up:
+                                {
+                                    current.Properties["energy"] -= current.Move(CardinalDirection.North);
+                                    this.expectCommand = false;
+                                    this.OnMove(current);
+                                    break;
+                                }
 
-                        case Keys.NumPad4:
-                        case Keys.H:
-                        case Keys.Left:
-                            {
-                                current.Properties["energy"] -= current.Move(CardinalDirection.West);
-                                this.expectCommand = false;
-                                this.OnMove(current);
-                                break;
-                            }
+                            case Keys.NumPad2:
+                            case Keys.J:
+                            case Keys.Down:
+                                {
+                                    current.Properties["energy"] -= current.Move(CardinalDirection.South);
+                                    this.expectCommand = false;
+                                    this.OnMove(current);
+                                    break;
+                                }
 
-                        case Keys.NumPad6:
-                        case Keys.L:
-                        case Keys.Right:
-                            {
-                                current.Properties["energy"] -= current.Move(CardinalDirection.East);
-                                this.expectCommand = false;
-                                this.OnMove(current);
-                                break;
-                            }
+                            case Keys.NumPad4:
+                            case Keys.H:
+                            case Keys.Left:
+                                {
+                                    current.Properties["energy"] -= current.Move(CardinalDirection.West);
+                                    this.expectCommand = false;
+                                    this.OnMove(current);
+                                    break;
+                                }
 
-                        case Keys.NumPad7:
-                        case Keys.Y:
-                            {
-                                current.Properties["energy"] -= current.Move(CardinalDirection.NorthWest);
-                                this.expectCommand = false;
-                                this.OnMove(current);
-                                break;
-                            }
+                            case Keys.NumPad6:
+                            case Keys.L:
+                            case Keys.Right:
+                                {
+                                    current.Properties["energy"] -= current.Move(CardinalDirection.East);
+                                    this.expectCommand = false;
+                                    this.OnMove(current);
+                                    break;
+                                }
 
-                        case Keys.NumPad9:
-                        case Keys.U:
-                            {
-                                current.Properties["energy"] -= current.Move(CardinalDirection.NorthEast);
-                                this.expectCommand = false;
-                                this.OnMove(current);
-                                break;
-                            }
+                            case Keys.NumPad7:
+                            case Keys.Y:
+                                {
+                                    current.Properties["energy"] -= current.Move(CardinalDirection.NorthWest);
+                                    this.expectCommand = false;
+                                    this.OnMove(current);
+                                    break;
+                                }
 
-                        case Keys.NumPad1:
-                        case Keys.B:
-                            {
-                                current.Properties["energy"] -= current.Move(CardinalDirection.SouthWest);
-                                this.expectCommand = false;
-                                this.OnMove(current);
-                                break;
-                            }
+                            case Keys.NumPad9:
+                            case Keys.U:
+                                {
+                                    current.Properties["energy"] -= current.Move(CardinalDirection.NorthEast);
+                                    this.expectCommand = false;
+                                    this.OnMove(current);
+                                    break;
+                                }
 
-                        case Keys.NumPad3:
-                        case Keys.N:
-                            {
-                                current.Properties["energy"] -= current.Move(CardinalDirection.SouthEast);
-                                this.expectCommand = false;
-                                this.OnMove(current);
-                                break;
-                            }
+                            case Keys.NumPad1:
+                            case Keys.B:
+                                {
+                                    current.Properties["energy"] -= current.Move(CardinalDirection.SouthWest);
+                                    this.expectCommand = false;
+                                    this.OnMove(current);
+                                    break;
+                                }
 
-                        default:
-                            break;
+                            case Keys.NumPad3:
+                            case Keys.N:
+                                {
+                                    current.Properties["energy"] -= current.Move(CardinalDirection.SouthEast);
+                                    this.expectCommand = false;
+                                    this.OnMove(current);
+                                    break;
+                                }
+
+                            default:
+                                break;
+
                             #endregion
+                        }
                     }
                 }
             }
@@ -262,13 +271,13 @@ namespace RLG
 
         protected void OnMove(IActor actor)
         {
-            this.messageLog.SendMessage(string.Format("player: [{0},{1}]", actor.Position.X, actor.Position.Y));
+            //this.messageLog.SendMessage(string.Format("player: [{0},{1}]", actor.Position.X, actor.Position.Y));
 
-            var path = actor.GetPathTo(actor.CurrentMap[new Point(16, 16)]);
+            var path = actor.GetPathTo(actor.CurrentMap[new Point(12, 19)]);
             this.visualEngine.HighlightPath(path);
             if (path == null)
             {
-                this.messageLog.SendMessage("no path exists to 16, 16");
+                this.messageLog.SendMessage("no path exists to given coordinates.");
             }
         }
 

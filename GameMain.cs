@@ -68,14 +68,14 @@ namespace RLG
             }
             else
             {
-                // Testing
-                Actor actor = new Actor("scienide", new PropertyBag());
+             /*   // Testing
+                Actor actor = new Actor("scienide", "@", new PropertyBag(),);
                 actor.Properties["intellect"] = 10;
                 actor.Volume = 85;
 
                 string serializedOutput = JsonConvert.SerializeObject(actor);
 
-                Actor deserialized = JsonConvert.DeserializeObject<Actor>(serializedOutput);
+                Actor deserialized = JsonConvert.DeserializeObject<Actor>(serializedOutput);*/
             }
             #endif
         }

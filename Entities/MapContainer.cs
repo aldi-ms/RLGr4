@@ -59,7 +59,8 @@ namespace RLG.Entities
             {
                 return false;
             }
-            return !this[tileCoordinates].PropertyFlags.HasFlag(Flags.IsBlocked);
+
+            return !this[tileCoordinates].Flags.HasFlag(Flags.IsBlocked);
         }
     }
 }
