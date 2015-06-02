@@ -25,4 +25,3 @@ namespace RLG.Contracts
         string DrawString { get; set; }
     }
 }
-

@@ -21,11 +21,11 @@
 
 namespace RLG.Framework
 {
+    using System;
+    using System.Collections.Generic;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Content;
     using Microsoft.Xna.Framework.Graphics;
-    using System;
-    using System.Collections.Generic;
 
     using RLG.Contracts;
     using RLG.Enumerations;
@@ -34,6 +34,8 @@ namespace RLG.Framework
 
     public class VisualEngine
     {
+        private static readonly Color TileMask = Color.DarkSlateGray;
+
         private bool highlighterIsOn;
         private int tileSize;
         private Texture2D highlightTexture;
@@ -43,8 +45,6 @@ namespace RLG.Framework
         private Dictionary<string, Texture2D> spriteDict;
         private FieldOfView<ITile> fieldOfView;
         private ContentManager content;
-
-        private static readonly Color TileMask = Color.DarkSlateGray;
 
         public VisualEngine(
             VisualMode mode, 
@@ -113,7 +113,10 @@ namespace RLG.Framework
 
         public IMap Map
         {
-            get { return this.currentMap; }
+            get
+            {
+                return this.currentMap;
+            }
             set
             {
                 if (value == null)
@@ -127,7 +130,7 @@ namespace RLG.Framework
                 this.fieldOfView = new FieldOfView<ITile>(this.currentMap.Tiles);
                 if (this.mode == VisualMode.Sprites)
                 {
-                    LoadSprites();
+                    this.LoadSprites();
                 }
             }
         }
@@ -167,7 +170,7 @@ namespace RLG.Framework
         public void DrawGame(SpriteBatch spriteBatch, Point mapCenter)
         {
             // TO DO: Draw UI
-            DrawMap(spriteBatch, mapCenter);
+            this.DrawMap(spriteBatch, mapCenter);
         }
 
         public void HighlightPath(List<Point> tiles)
@@ -190,18 +193,18 @@ namespace RLG.Framework
 
             spriteBatch.Begin();
 
-            int xEnd = this.MapDrawboxTileSize.X * this.tileSize;
-            int yEnd = this.MapDrawboxTileSize.Y * this.tileSize;
+            int xStop = this.MapDrawboxTileSize.X * this.tileSize;
+            int yStop = this.MapDrawboxTileSize.Y * this.tileSize;
 
-            for (int x = this.LeftMargin; x <= xEnd + this.LeftMargin; x += this.tileSize)
+            for (int x = this.LeftMargin; x <= xStop + this.LeftMargin; x += this.tileSize)
             {
-                Rectangle rect = new Rectangle(x, this.LeftMargin, 1, yEnd);
+                Rectangle rect = new Rectangle(x, this.LeftMargin, 1, yStop);
                 spriteBatch.Draw(simpleTexture, rect, Color.Wheat);
             }
 
-            for (int y = this.TopMargin; y <= yEnd + this.TopMargin; y += this.tileSize)
+            for (int y = this.TopMargin; y <= yStop + this.TopMargin; y += this.tileSize)
             {
-                Rectangle rect = new Rectangle(this.TopMargin, y, xEnd, 1);
+                Rectangle rect = new Rectangle(this.TopMargin, y, xStop, 1);
                 spriteBatch.Draw(simpleTexture, rect, Color.Wheat);
             }
 
@@ -210,7 +213,7 @@ namespace RLG.Framework
 
         private void DrawMap(SpriteBatch spriteBatch, Point mapCenter)
         {
-            if (highlighterIsOn && this.highlightTexture == null)
+            if (this.highlighterIsOn && this.highlightTexture == null)
             {
                 this.highlightTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
                 this.highlightTexture.SetData(new Color[] { Color.Goldenrod });
@@ -318,6 +321,7 @@ namespace RLG.Framework
                                     this.ASCIIEffects,
                                     this.LayerDepth);
                             }
+
                             break;
                             #endregion
 
@@ -378,6 +382,7 @@ namespace RLG.Framework
                                     spriteBatch.Draw(terrainTexture, drawPosition, VisualEngine.TileMask); 
                                 }
                             }
+
                             break;
                             #endregion
                     }
@@ -397,6 +402,7 @@ namespace RLG.Framework
                     {
                         break;
                     }
+
                     this.spriteDict.Add(
                         gameObject.DrawString, 
                         this.content.Load<Texture2D>(gameObject.DrawString));
@@ -405,4 +411,3 @@ namespace RLG.Framework
         }
     }
 }
-

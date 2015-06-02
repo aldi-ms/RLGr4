@@ -50,4 +50,3 @@ namespace RLG.Contracts
         uint Move(CardinalDirection direction);
     }
 }
-

@@ -21,14 +21,14 @@
 
 namespace RLG.Contracts
 {
-    using Microsoft.Xna.Framework;    
+    using Microsoft.Xna.Framework;
     using RLG.Framework;
 
     public interface IMap
     {
         FlatArray<ITile> Tiles { get; set; }
 
-        ITile this [Point tileCoordinates] { get; set; }
+        ITile this[Point tileCoordinates] { get; set; }
 
         bool CheckTile(Point tileCoordinates, out string blockingObject);
     }

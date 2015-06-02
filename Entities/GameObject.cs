@@ -51,6 +51,7 @@ namespace RLG.Entities
             {
                 return this.Name;
             }
+
             set
             {
                 if (string.IsNullOrEmpty(value))
@@ -70,6 +71,7 @@ namespace RLG.Entities
             {
                 return this.volume;
             }
+
             set
             {
                 if (value > 125)
@@ -87,6 +89,7 @@ namespace RLG.Entities
             {
                 return this.drawString;
             }
+
             set
             {
                 if (string.IsNullOrEmpty(value))
@@ -105,4 +108,3 @@ namespace RLG.Entities
         #endregion
     }
 }
-

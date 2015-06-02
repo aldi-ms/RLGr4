@@ -32,7 +32,7 @@ namespace RLG.Framework
             this.statistics = new Dictionary<string, uint>();
         }
 
-        public uint this [string index]
+        public uint this[string index]
         {
             get
             {
@@ -66,4 +66,3 @@ namespace RLG.Framework
         }
     }
 }
-

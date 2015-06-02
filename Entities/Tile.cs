@@ -21,10 +21,11 @@
 
 namespace RLG.Entities
 {
-    using Microsoft.Xna.Framework;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.Xna.Framework;
+
     using RLG.Contracts;
     using RLG.Enumerations;
     using RLG.Utilities;
@@ -49,7 +50,6 @@ namespace RLG.Entities
             {
                 this.AddObject(gameObject);
             }
-
         }
 
         #region Properties
@@ -70,7 +70,7 @@ namespace RLG.Entities
         {
             get
             {
-                Flags cumulativeFlags = flags;
+                Flags cumulativeFlags = this.flags;
 
                 foreach (var gameObject in this.ObjectsContained)
                 {
@@ -79,6 +79,7 @@ namespace RLG.Entities
 
                 return cumulativeFlags;
             }
+
             set
             {
                 this.flags = value;
@@ -97,6 +98,7 @@ namespace RLG.Entities
 
                 return totalVolume;
             }
+
             set
             {
             }
@@ -116,6 +118,7 @@ namespace RLG.Entities
             {
                 return this.Flags.HasFlag(Flags.IsVisible); 
             }
+
             set
             {
                 if (value)
@@ -144,6 +147,7 @@ namespace RLG.Entities
                     .FirstOrDefault()
                     .DrawString;
             }
+
             set
             {
             }
@@ -167,7 +171,6 @@ namespace RLG.Entities
                 return false;
             }
 
-
             this.objectsContained.Add(gameObject);
             return true;
         }
@@ -180,9 +183,9 @@ namespace RLG.Entities
                     "gameObject",
                     "On removing game object from a tile, the object cannot be null!");
             }
+
             this.flags = new Flags();
             return this.objectsContained.Remove(gameObject);
         }
     }
 }
-

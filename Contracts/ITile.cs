@@ -21,10 +21,10 @@
 
 namespace RLG.Contracts
 {
-    using Microsoft.Xna.Framework;
     using System.Collections.Generic;
-    using RLG.Framework.FieldOfView;
+    using Microsoft.Xna.Framework;
     using RLG.Enumerations;
+    using RLG.Framework.FieldOfView;
 
     public interface ITile : IFovCell, IDrawable
     {
@@ -43,4 +43,3 @@ namespace RLG.Contracts
         bool RemoveObject(IGameObject gameObject);
     }
 }
-

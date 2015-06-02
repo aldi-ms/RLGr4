@@ -37,12 +37,13 @@ namespace RLG.Entities
 
         public FlatArray<ITile> Tiles { get; set; }
 
-        public ITile this [Point tileCoordinates]
+        public ITile this[Point tileCoordinates]
         {
             get
             {
                 return this.Tiles[tileCoordinates.X, tileCoordinates.Y];
             }
+
             set
             {
                 this.Tiles[tileCoordinates.X, tileCoordinates.Y] = value;

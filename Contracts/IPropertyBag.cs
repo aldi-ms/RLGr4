@@ -27,7 +27,6 @@ namespace RLG.Contracts
         /// Gets or sets the statistics of an object at the specified index.
         /// </summary>
         /// <param name="index">Index (statistic) to look at.</param>
-        uint this [string index] { get; set; }
+        uint this[string index] { get; set; }
     }
 }
-

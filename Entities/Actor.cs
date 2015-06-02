@@ -21,8 +21,9 @@
 
 namespace RLG.Entities
 {
-    using Microsoft.Xna.Framework;
     using System;
+    using Microsoft.Xna.Framework;
+
     using RLG.Contracts;
     using RLG.Enumerations;
     using RLG.Utilities;
@@ -50,7 +51,7 @@ namespace RLG.Entities
 
         #region Properties
 
-        //TO DO: Implement getters and setters to check values
+        ////TO DO: Implement getters and setters to check values
      
         public Point Position { get; set; }
 
@@ -84,10 +85,8 @@ namespace RLG.Entities
             {
                 // unsuccessful move
                 // message log block object
-
                 return 0;
             }
         }
     }
 }
-

@@ -63,9 +63,9 @@ namespace RLG.Framework
         /// <returns>The <typeparamref name="T"/> element at given position.</returns>
         public T this[int x, int y]
         {
-            get { return this.data[x + (y * Width)]; }
+            get { return this.data[x + (y * this.Width)]; }
 
-            set { this.data[x + (y * Width)] = value; }
+            set { this.data[x + (y * this.Width)] = value; }
         }
 
         /// <summary>

@@ -18,10 +18,10 @@
 
 namespace RLG.Framework
 {
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
     using System;
     using System.Text;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
 
     using RLG.Contracts;
     using RLG.Enumerations;
@@ -72,7 +72,7 @@ namespace RLG.Framework
             this.rectangle = logRectangle;
             this.spriteFont = spriteFont;
 
-            spaceScreenWidth = this.TextScreenLength(" ");
+            this.spaceScreenWidth = this.TextScreenLength(" ");
 
             // Default text color
             this.textColor = Color.Gray;
@@ -88,7 +88,7 @@ namespace RLG.Framework
 
                 this.lineVectors[i] = new Vector2(
                     this.rectangle.Left + TextLeftPad,
-                    this.rectangle.Bottom - i * this.FontHeight);
+                    this.rectangle.Bottom - (i * this.FontHeight));
             }
 
             this.ShowGreeting();
@@ -123,15 +123,12 @@ namespace RLG.Framework
             {
                 for (int i = this.lines.Length - 1; i > 0; i--)
                 {
-                    lines[i].Clear();
-                    lines[i].Append(lines[i - 1]);
+                    this.lines[i].Clear();
+                    this.lines[i].Append(this.lines[i - 1]);
                 }
 
-                lines[0].Clear();
-                lines[0].Append(text);
-
-                // Save log to a file
-                // WriteLogFile(text);
+                this.lines[0].Clear();
+                this.lines[0].Append(text);
 
                 return true;
             }
@@ -166,8 +163,8 @@ namespace RLG.Framework
                 }
 
                 // Recursively send splitted messages.
-                SendMessage(textFirstPart.ToString());
-                SendMessage(textSecondPart.ToString());
+                this.SendMessage(textFirstPart.ToString());
+                this.SendMessage(textSecondPart.ToString());
             }
 
             return false;
@@ -178,7 +175,7 @@ namespace RLG.Framework
         /// </summary>
         public void ClearLog()
         {
-            for (int i = 0; i < lines.Length; i++)
+            for (int i = 0; i < this.lines.Length; i++)
             {
                 this.lines[i].Clear();
             }
@@ -193,12 +190,12 @@ namespace RLG.Framework
         {
             spriteBatch.Begin();
 
-            for (int i = 0; i < lines.Length; i++)
+            for (int i = 0; i < this.lines.Length; i++)
             {
                 #region Colored string draw
 
                 int linePosition = 0;
-                string workText = lines[i].ToString();
+                string workText = this.lines[i].ToString();
                 char selector = '\0';
                 StringBuilder color = new StringBuilder(10);
 
@@ -219,9 +216,10 @@ namespace RLG.Framework
                         k++;
 
                         // Select text to color.
-                        string selectedText = "";
+                        string selectedText = string.Empty;
 
                         #region Text Select
+
                         switch (selector)
                         {
                             case 'L':
@@ -271,6 +269,7 @@ namespace RLG.Framework
                         }
 
                         k--;
+
                         #endregion
 
                         uint colorUInt = uint.Parse(color.ToString());
@@ -278,8 +277,8 @@ namespace RLG.Framework
                         color.Clear();
 
                         Vector2 newPosition = new Vector2(
-                            lineVectors[i].X + linePosition, 
-                            lineVectors[i].Y);
+                            this.lineVectors[i].X + linePosition, 
+                            this.lineVectors[i].Y);
 
                         // Set the line position for the next string.
                         linePosition += this.TextScreenLength(this.RemoveColorSeq(selectedText, true));
@@ -295,8 +294,8 @@ namespace RLG.Framework
                     else
                     {
                         Vector2 newPosition = new Vector2(
-                            lineVectors[i].X + linePosition,
-                            lineVectors[i].Y);
+                            this.lineVectors[i].X + linePosition,
+                            this.lineVectors[i].Y);
 
                         spriteBatch.DrawString(
                             this.spriteFont,

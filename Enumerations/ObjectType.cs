@@ -31,4 +31,3 @@ namespace RLG.Enumerations
         Other
     }
 }
-

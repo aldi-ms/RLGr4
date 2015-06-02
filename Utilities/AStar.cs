@@ -20,10 +20,11 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace RLG.Utilities
 {
-    using Microsoft.Xna.Framework;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.Xna.Framework;
+
     using RLG.Contracts;
     using RLG.Entities;
 
@@ -67,7 +68,7 @@ namespace RLG.Utilities
                         continue;
                     }
 
-                    int tentativeGScore = gScore[current] + 10;//neighboor.ObjectsContained.GetTerrain().MoveCost;
+                    int tentativeGScore = gScore[current] + neighboor.ObjectsContained.GetTerrain().Volume;
 
                     if (!openSet.Contains(neighboor) || tentativeGScore < gScore[neighboor])
                     {
@@ -88,7 +89,6 @@ namespace RLG.Utilities
 
         private static int HeuristicCostEstimate(ITile current, ITile goal)
         {
-            
             // Diagonal distance (a.k.a. Chebyshev distance)
             int dx = Math.Abs(current.Position.X - goal.Position.X);
             int dy = Math.Abs(current.Position.Y - goal.Position.Y);

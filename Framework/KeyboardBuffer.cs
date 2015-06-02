@@ -46,11 +46,11 @@ namespace RLG.Framework
         {
             this.currentKeyState = Keyboard.GetState();
 
-            foreach (Keys key in currentKeyState.GetPressedKeys())
+            foreach (Keys key in this.currentKeyState.GetPressedKeys())
             {
-                if (CheckKey(key))
+                if (this.CheckKey(key))
                 {
-                    base.Enqueue(key);
+                    Enqueue(key);
                 }
             }
 
@@ -74,4 +74,3 @@ namespace RLG.Framework
         }
     }
 }
-

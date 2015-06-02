@@ -27,4 +27,3 @@ namespace RLG.Enumerations
         Sprites
     }
 }
-

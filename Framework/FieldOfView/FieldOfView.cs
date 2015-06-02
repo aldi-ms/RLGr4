@@ -140,6 +140,7 @@ namespace RLG.Framework.FieldOfView
         MRPAS<TFovCell> mrps;
 
         internal FlatArray<TFovCell> grid;
+
         /// <summary>
         /// Construct a FieldOfView instance given a map of IFovCell objects
         /// </summary>

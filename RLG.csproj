@@ -67,7 +67,6 @@
     <Compile Include="Contracts\IItem.cs" />
     <Compile Include="Contracts\ITerrain.cs" />
     <Compile Include="Utilities\GameObjectExtensions.cs" />
-    <Compile Include="Utilities\StringCompression.cs" />
     <Compile Include="Framework\FieldOfView\FOVSettings.cs" />
     <Compile Include="Framework\Buffer.cs" />
     <Compile Include="Framework\KeyboardBuffer.cs" />

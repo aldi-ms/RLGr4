@@ -18,8 +18,8 @@
 
 namespace RLG.Utilities
 {
-    using Microsoft.Xna.Framework;
     using System;
+    using Microsoft.Xna.Framework;
 
     public static class ColorUtilities
     {
@@ -114,7 +114,6 @@ namespace RLG.Utilities
                         g = m;
                         b = mid2;
                         break;
-
                 }
             }
 
@@ -123,7 +122,6 @@ namespace RLG.Utilities
             byte blue = Convert.ToByte(b * 255.0f);
 
             return new Color(red, green, blue);
-
         }
     }
 }

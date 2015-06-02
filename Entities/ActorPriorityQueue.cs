@@ -29,9 +29,9 @@ namespace RLG.Entities
 
     public class ActorPriorityQueue : PriorityQueue<IActor>
     {
-        public IActor this [int index]
+        public IActor this[int index]
         {
-            get { return base.Queue[index]; }
+            get { return Queue[index]; }
         }
 
         /// <summary>
@@ -40,12 +40,12 @@ namespace RLG.Entities
         /// <remarks>Call each turn to make Actors accumulate energy.</remarks>
         public void AccumulateEnergy()
         {
-            foreach (IActor actor in base.Queue)
+            foreach (IActor actor in Queue)
             {
                 actor.Properties["energy"] += actor.Properties["speed"];
             }
 
-            SortList();
+            this.SortList();
         }
 
         /// <summary>
@@ -53,9 +53,8 @@ namespace RLG.Entities
         /// </summary>
         public override void SortList()
         {
-            base.Queue.Sort(
-                (x, y) => y.Properties["energy"].CompareTo(x.Properties["energy"])
-            );
+            Queue.Sort(
+                (x, y) => y.Properties["energy"].CompareTo(x.Properties["energy"]));
         }
     }
 }

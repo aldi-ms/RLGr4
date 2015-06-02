@@ -21,10 +21,10 @@
 
 namespace RLG.Utilities
 {
-    using RLG.Contracts;
-    using RLG.Enumerations;
     using System.Collections.Generic;
     using System.Linq;
+    using RLG.Contracts;
+    using RLG.Enumerations;
     
     public static class GameObjectExtensions
     {

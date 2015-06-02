@@ -27,11 +27,27 @@ namespace RLG.Framework.FieldOfView
     {
         private int maxRange;
 
+        public FOVSettings(
+            int maxRange = 4, 
+            bool lightWalls = true,
+            FOVMethod method = FOVMethod.MRPAS,
+            RangeLimitShape shape = RangeLimitShape.Circle)
+        {
+            this.MaxRange = maxRange;
+            this.LightWalls = lightWalls;
+            this.Method = method;
+            this.Shape = shape;
+        }
+
         #region Properties
 
         public int MaxRange
         {
-            get { return this.maxRange; }
+            get
+            { 
+                return this.maxRange;
+            }
+
             set
             {
                 if (value < 0 || value > 50)
@@ -52,18 +68,5 @@ namespace RLG.Framework.FieldOfView
         public RangeLimitShape Shape { get; set; }
 
         #endregion
-
-        public FOVSettings(
-            int maxRange = 4, 
-            bool lightWalls = true,
-            FOVMethod method = FOVMethod.MRPAS,
-            RangeLimitShape shape = RangeLimitShape.Circle)
-        {
-            this.MaxRange = maxRange;
-            this.LightWalls = lightWalls;
-            this.Method = method;
-            this.Shape = shape;
-        }
     }
 }
-

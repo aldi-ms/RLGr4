@@ -21,15 +21,15 @@
 
 namespace RLG
 {
+    using System;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using Microsoft.Xna.Framework.Storage;
     using Microsoft.Xna.Framework.Input;
-    using System;
+    using Microsoft.Xna.Framework.Storage;
 
     using RLG.Contracts;
-    using RLG.Enumerations;
     using RLG.Entities;
+    using RLG.Enumerations;
     using RLG.Framework;
     using RLG.Utilities;
 
@@ -38,19 +38,17 @@ namespace RLG
     /// </summary>
     public class CanasUvighi : Game
     {
-        private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-
-
-        // Custom defined fields
-
         private const int ScreenWidth = 800;
         private const int ScreenHeight = 500;
         private const int MinTurnCost = 100;
 
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+
+        // Custom defined fields
         private bool expectCommand = false;
         private VisualEngine visualEngine;
-        private SpriteFont ASCIIGraphicsFont;
+        private SpriteFont asciiGraphicsFont;
         private SpriteFont logFont;
         private IMessageLog messageLog;
         private KeyboardBuffer keyboardBuffer;
@@ -60,7 +58,7 @@ namespace RLG
         public CanasUvighi()
         {
             this.graphics = new GraphicsDeviceManager(this);
-            this.Content.RootDirectory = "Content";	            
+            this.Content.RootDirectory = "Content";
             this.graphics.IsFullScreen = false;
         }
 
@@ -93,7 +91,7 @@ namespace RLG
         protected override void LoadContent()
         {
             // Font for ASCII graphics
-            this.ASCIIGraphicsFont = this.Content.Load<SpriteFont>("Fonts/BPmono40Bold");
+            this.asciiGraphicsFont = this.Content.Load<SpriteFont>("Fonts/BPmono40Bold");
             this.logFont = this.Content.Load<SpriteFont>("Fonts/Consolas12");
 
             #region Temporary code
@@ -104,22 +102,21 @@ namespace RLG
                                    MapUtilities.GenerateRandomMap(size, VisualMode.ASCII));
             map.LoadTileNeighboors();
 
-
             this.visualEngine = new VisualEngine(
                 VisualMode.ASCII,
                 32,
                 new Point(16, 11),
                 map,
                 null,
-                ASCIIGraphicsFont);
+                this.asciiGraphicsFont);
             this.visualEngine.DeltaTileDrawCoordinates = new Point(4, -6);
             this.visualEngine.ASCIIScale = 0.7f;
 
             Rectangle logRect = new Rectangle(
                                     0,
-                                    visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize,
+                                    this.visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize,
                                     ScreenWidth - 30,
-                                    (ScreenHeight - 30) - visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize);
+                                    (ScreenHeight - 30) - (this.visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize));
             
             this.messageLog = new MessageLog(logRect, this.logFont);
 
@@ -155,7 +152,7 @@ namespace RLG
             switch (key)
             {
                 case Keys.Escape:
-                    Exit();
+                    this.Exit();
                     break;
 
                 default:
@@ -163,14 +160,14 @@ namespace RLG
                     break;
             }
 
-            if (!expectCommand)
+            if (!this.expectCommand)
             {
-                actorQueue.AccumulateEnergy();
+                this.actorQueue.AccumulateEnergy();
             }
 
-            for (int x = 0; x < actorQueue.Count; x++)
+            for (int x = 0; x < this.actorQueue.Count; x++)
             {
-                IActor current = actorQueue[x];
+                IActor current = this.actorQueue[x];
                 if (current.Properties["energy"] >= MinTurnCost)
                 {
                     if (current.Flags.HasFlag(Flags.IsPlayerControl))
@@ -271,8 +268,7 @@ namespace RLG
 
         protected void OnMove(IActor actor)
         {
-            //this.messageLog.SendMessage(string.Format("player: [{0},{1}]", actor.Position.X, actor.Position.Y));
-
+            // this.messageLog.SendMessage(string.Format("player: [{0},{1}]", actor.Position.X, actor.Position.Y));
             var path = actor.GetPathTo(actor.CurrentMap[new Point(12, 19)]);
             this.visualEngine.HighlightPath(path);
             if (path == null)
@@ -287,14 +283,14 @@ namespace RLG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            graphics.GraphicsDevice.Clear(Color.Black);
+            this.graphics.GraphicsDevice.Clear(Color.Black);
 
             this.visualEngine.DrawGame(this.spriteBatch, this.actor.Position);
-            //this.visualEngine.DrawGrid(this.GraphicsDevice, this.spriteBatch);
+
+            // this.visualEngine.DrawGrid(this.GraphicsDevice, this.spriteBatch);
             this.messageLog.DrawLog(this.spriteBatch);
 
             base.Draw(gameTime);
         }
     }
 }
-

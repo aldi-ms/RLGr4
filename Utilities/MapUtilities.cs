@@ -21,17 +21,18 @@
 
 namespace RLG.Utilities
 {
-    using Microsoft.Xna.Framework;
     using System;
     using System.Collections.Generic;
+    using Microsoft.Xna.Framework;
+
     using RLG.Contracts;
-    using RLG.Enumerations;
     using RLG.Entities;
+    using RLG.Enumerations;
     using RLG.Framework;
 
     public static class MapUtilities
     {
-        private static readonly Point[] directions = new Point[]
+        private static readonly Point[] Directions = new Point[]
         {
             new Point(-1, -1),
             new Point(-1, 1),
@@ -43,13 +44,13 @@ namespace RLG.Utilities
             new Point(1, 1)
         };
         
-        private static Random RNG = new Random();
+        private static Random rng = new Random();
 
         public static FlatArray<ITile> GenerateRandomMap(Point size, VisualMode mode)
         {
             FlatArray<ITile> resultTiles = new FlatArray<ITile>(size.X, size.Y);
 
-            Terrain grass = new Terrain("grass", ",", 1,Flags.IsTransparent);
+            Terrain grass = new Terrain("grass", ",", 1, Flags.IsTransparent);
             Terrain wall = new Terrain("wall", "#", Tile.TileVolume, Flags.IsBlocked);
 
             switch (mode)
@@ -59,11 +60,11 @@ namespace RLG.Utilities
                     {
                         for (int j = 0; j < size.Y; j++)
                         {
-                            int val = RNG.Next(0, 100);
+                            int val = rng.Next(0, 100);
                             if (val > 70)
                             {
                                 // implement terrain
-                                resultTiles[i, j] = new Tile(new Point(i , j), wall);
+                                resultTiles[i, j] = new Tile(new Point(i, j), wall);
                             }
                             else
                             {
@@ -71,6 +72,7 @@ namespace RLG.Utilities
                             }
                         }
                     }
+
                     break;
 
                 case VisualMode.Sprites:                    
@@ -92,7 +94,7 @@ namespace RLG.Utilities
                     if (map.CheckTile(currentPosition, out str))
                     {
                         List<ITile> neighboors = new List<ITile>();
-                        foreach (var dir in directions)
+                        foreach (var dir in Directions)
                         {
                             Point newPosition = currentPosition + dir;
 
@@ -109,4 +111,3 @@ namespace RLG.Utilities
         }
     }
 }
-

@@ -31,4 +31,3 @@ namespace RLG.Contracts
         byte Volume { get; set; }
     }
 }
-

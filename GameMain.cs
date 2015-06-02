@@ -1,22 +1,22 @@
-﻿#if MONOMAC
-using MonoMac.AppKit;
-using MonoMac.Foundation;
-
-#elif __IOS__
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
-#endif
-using System.IO;
-
-namespace RLG
+﻿namespace RLG
 {
     #region Using Statements
 
+    #if MONOMAC
+    using MonoMac.AppKit;
+    using MonoMac.Foundation;
+
+    #elif __IOS__
+    using MonoTouch.Foundation;
+    using MonoTouch.UIKit;
+    #endif
+
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
-    using System.Linq;
 
     using Newtonsoft.Json;
     using RLG.Contracts;
@@ -33,16 +33,10 @@ namespace RLG
 	
 
 #else
-    static class GameMain
-	#endif
+    public static class GameMain
+    #endif
     {
         private static CanasUvighi game;
-
-        internal static void RunGame()
-        {
-            game = new CanasUvighi();
-            game.Run();
-        }
 
         /// <summary>
         /// The main entry point for the application.
@@ -50,7 +44,7 @@ namespace RLG
         #if !MONOMAC && !__IOS__		 
         [STAThread]
         #endif
-		static void Main(string[] args)
+        public static void Main(string[] args)
         {
             #if MONOMAC
 			NSApplication.Init ();
@@ -62,12 +56,7 @@ namespace RLG
             #elif __IOS__
 			UIApplication.Main(args, null, "AppDelegate");
             #else
-            if (true)
-            {
-                RunGame();
-            }
-            else
-            {
+            RunGame();
              /*   // Testing
                 Actor actor = new Actor("scienide", "@", new PropertyBag(),);
                 actor.Properties["intellect"] = 10;
@@ -76,8 +65,13 @@ namespace RLG
                 string serializedOutput = JsonConvert.SerializeObject(actor);
 
                 Actor deserialized = JsonConvert.DeserializeObject<Actor>(serializedOutput);*/
-            }
             #endif
+        }
+
+        internal static void RunGame()
+        {
+            game = new CanasUvighi();
+            game.Run();
         }
 
         #if __IOS__
@@ -86,10 +80,6 @@ namespace RLG
 			RunGame();
 		}
         #endif
-        public static void Testing()
-        {
-            throw new NotImplementedException();
-        }
     }
 
     #if MONOMAC
@@ -112,6 +102,4 @@ namespace RLG
 		}
 	}  
 	#endif
-
 }
-

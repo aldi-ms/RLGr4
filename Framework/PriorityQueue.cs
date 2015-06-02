@@ -65,7 +65,7 @@ namespace RLG.Framework
         {
             this.queue.Add(element);
 
-            SortList();
+            this.SortList();
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace RLG.Framework
         {
             if (this.queue.Remove(element))
             {
-                SortList();
+                this.SortList();
                 return true;
             }
 
