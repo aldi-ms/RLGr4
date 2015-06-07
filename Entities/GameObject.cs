@@ -22,6 +22,7 @@ namespace RLG.Entities
 {
     using System;
     using RLG.Contracts;
+    using RLG.Entities;
     using RLG.Enumerations;
 
     public abstract class GameObject : IGameObject
@@ -49,7 +50,7 @@ namespace RLG.Entities
         {
             get
             {
-                return this.Name;
+                return this.name;
             }
 
             set

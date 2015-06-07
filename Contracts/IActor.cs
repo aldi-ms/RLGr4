@@ -48,5 +48,7 @@ namespace RLG.Contracts
         /// </summary>
         /// <param name="direction">Direction.</param>
         uint Move(CardinalDirection direction);
+
+        bool CheckTile(Point tileCoordinates, out string blockingObject);
     }
 }

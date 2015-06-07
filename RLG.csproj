@@ -87,6 +87,7 @@
     <Compile Include="Utilities\AStar.cs" />
     <Compile Include="Entities\Terrain.cs" />
     <Compile Include="Entities\GameObject.cs" />
+    <Compile Include="Utilities\TileExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

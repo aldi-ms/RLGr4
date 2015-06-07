@@ -21,6 +21,8 @@
 
 namespace RLG.Entities
 {
+    using System;
+
     using RLG.Contracts;
     using RLG.Enumerations;
 
@@ -35,5 +37,4 @@ namespace RLG.Entities
             : base(name, drawString, moveCost, flags)
         {            
         }
-    }
-}
+    }}

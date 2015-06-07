@@ -125,7 +125,7 @@ namespace RLG
                 "@",
                 new PropertyBag(),
                 map, 
-                Flags.IsPlayerControl | Flags.IsBlocked,
+                Flags.IsPlayerControl,
                 85);
             
             this.actor.Position = new Point();
@@ -153,6 +153,10 @@ namespace RLG
             {
                 case Keys.Escape:
                     this.Exit();
+                    break;
+
+                case Keys.Q:
+                    //Actor npc = new Actor("Minotaur", "M", 85);
                     break;
 
                 default:
@@ -269,12 +273,12 @@ namespace RLG
         protected void OnMove(IActor actor)
         {
             // this.messageLog.SendMessage(string.Format("player: [{0},{1}]", actor.Position.X, actor.Position.Y));
-            var path = actor.GetPathTo(actor.CurrentMap[new Point(12, 19)]);
+            /*var path = actor.GetPathTo(actor.CurrentMap[new Point(12, 19)]);
             this.visualEngine.HighlightPath(path);
             if (path == null)
             {
                 this.messageLog.SendMessage("no path exists to given coordinates.");
-            }
+            }*/
         }
 
         /// <summary>

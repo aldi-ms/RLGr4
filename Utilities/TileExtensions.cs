@@ -1,5 +1,5 @@
 ﻿//
-//  IMap.cs
+//  TileExtensions.cs
 //
 //  Author:
 //       scienide <alexandar921@abv.bg>
@@ -18,16 +18,18 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-namespace RLG.Contracts
+namespace RLG.Utilities
 {
-    using Microsoft.Xna.Framework;
-    using RLG.Framework;
-
-    public interface IMap
+    using System;
+    using RLG.Contracts;
+    using RLG.Entities;
+    
+    public static class TileExtensions
     {
-        FlatArray<ITile> Tiles { get; set; }
-
-        ITile this[Point tileCoordinates] { get; set; }
+        public static bool Try(this ITile tile, IGameObject gameObject)
+        {
+            return (tile.Volume + gameObject.Volume <= Tile.MaxVolume);
+        }
     }
 }
+

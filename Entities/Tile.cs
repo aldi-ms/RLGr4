@@ -32,7 +32,7 @@ namespace RLG.Entities
 
     public class Tile : ITile
     {
-        public const byte TileVolume = 125;
+        public const byte MaxVolume = 125;
         private List<IGameObject> objectsContained;
         private Flags flags;
 
@@ -166,7 +166,7 @@ namespace RLG.Entities
 
             // Volume check. Each Tile has 100 volume available, and each object
             // has a volume property.
-            if (this.Volume + gameObject.Volume > Tile.TileVolume)
+            if (this.Volume + gameObject.Volume > Tile.MaxVolume)
             {
                 return false;
             }
@@ -185,7 +185,8 @@ namespace RLG.Entities
             }
 
             this.flags = new Flags();
-            return this.objectsContained.Remove(gameObject);
+            bool result = this.objectsContained.Remove(gameObject);
+            return result;
         }
     }
 }

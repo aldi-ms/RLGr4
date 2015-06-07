@@ -18,14 +18,18 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using System.Text;
 
 namespace RLG.Entities
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Microsoft.Xna.Framework;
 
     using RLG.Contracts;
     using RLG.Enumerations;
+    using RLG.Framework;
     using RLG.Utilities;
 
     public class Actor : GameObject, IActor
@@ -33,7 +37,7 @@ namespace RLG.Entities
         #region Constructors
 
         public Actor(string name, string drawStr, IPropertyBag properties, IMap map, Flags flags, byte volume)
-            : base(name, drawStr, volume, flags)
+            :base(name, drawStr, volume, flags)
         {
             this.Properties = properties;
             this.CurrentMap = map;
@@ -43,7 +47,7 @@ namespace RLG.Entities
         }
 
         public Actor(string name, string drawStr, byte volume)
-            : this(name, drawStr, null, null, new Flags(), volume)
+            : this(name, drawStr, new PropertyBag(), null, new Flags(), volume)
         {
         }
 
@@ -51,8 +55,7 @@ namespace RLG.Entities
 
         #region Properties
 
-        ////TO DO: Implement getters and setters to check values
-     
+
         public Point Position { get; set; }
 
         public IMap CurrentMap { get; set; }
@@ -73,7 +76,7 @@ namespace RLG.Entities
             Point newPosition = this.Position + direction.GetDeltaCoordinate();
 
             string blockingObj = string.Empty;
-            if (this.CurrentMap.CheckTile(newPosition, out blockingObj))
+            if (this.CheckTile(newPosition, out blockingObj))
             {
                 this.CurrentMap[this.Position].RemoveObject(this);
                 this.CurrentMap[newPosition].AddObject(this);
@@ -87,6 +90,56 @@ namespace RLG.Entities
                 // message log block object
                 return 0;
             }
+        }
+        public bool CheckTile(Point tileCoordinates, out string blockingObject)
+        {
+            blockingObject = string.Empty;
+            if (tileCoordinates.X >= this.CurrentMap.Tiles.Width || tileCoordinates.X < 0
+                || tileCoordinates.Y >= this.CurrentMap.Tiles.Height || tileCoordinates.Y < 0)
+            {
+                return false;
+            }
+
+            // Try to get in the tile (returns true if this.Volume + prev.Tile.Volume < Tile.MaxVolume
+            if (this.CurrentMap[tileCoordinates].Try(this))
+            {
+                return true;
+            }
+
+            // Otherwise get send a information message
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("There doesn't appear to be enough space for you. There is ");
+
+            string[] gameObjInTile = this.CurrentMap[tileCoordinates]
+                .ObjectsContained
+                .OrderBy(x => x.Volume)
+                .Select(x => x.Name)
+                .ToArray();
+            
+            for (int i = 0; i < gameObjInTile.Length; i++)
+            {
+                // TODO Can be improved to sound more natural
+                if (gameObjInTile[i] != null)
+                {
+                    sb.AppendFormat("a {0}", gameObjInTile[i]);
+
+                    if (i > gameObjInTile.Length)
+                    {
+                        // There are more elements in the array, put comma.
+                        sb.Append(", ");
+                    }
+                    else
+                    {
+                        // This is the last element in the array, put stop.
+                        sb.Append(".");
+                    }
+                }
+            }
+
+            blockingObject = sb.ToString();
+
+            return false;
         }
     }
 }

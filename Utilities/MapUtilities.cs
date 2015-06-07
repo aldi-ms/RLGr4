@@ -46,41 +46,6 @@ namespace RLG.Utilities
         
         private static Random rng = new Random();
 
-        public static FlatArray<ITile> GenerateRandomMap(Point size, VisualMode mode)
-        {
-            FlatArray<ITile> resultTiles = new FlatArray<ITile>(size.X, size.Y);
-
-            Terrain grass = new Terrain("grass", ",", 1, Flags.IsTransparent);
-            Terrain wall = new Terrain("wall", "#", Tile.TileVolume, Flags.IsBlocked);
-
-            switch (mode)
-            {
-                case VisualMode.ASCII:
-                    for (int i = 0; i < size.X; i++)
-                    {
-                        for (int j = 0; j < size.Y; j++)
-                        {
-                            int val = rng.Next(0, 100);
-                            if (val > 70)
-                            {
-                                // implement terrain
-                                resultTiles[i, j] = new Tile(new Point(i, j), wall);
-                            }
-                            else
-                            {
-                                resultTiles[i, j] = new Tile(new Point(i, j), grass);
-                            }
-                        }
-                    }
-
-                    break;
-
-                case VisualMode.Sprites:                    
-                    break;
-            }
-
-            return resultTiles;
-        }
 
         public static void LoadTileNeighboors(this IMap map)
         {
@@ -108,6 +73,50 @@ namespace RLG.Utilities
                     }
                 }
             }
+        }
+
+        private static bool CheckTile(this IMap map, Point position, out string blocking)
+        {
+            IActor pupet = new Actor("pupet", "p", new PropertyBag(), map, new Flags(), 0);
+
+            return pupet.CheckTile(position, out blocking);
+        }
+
+        public static FlatArray<ITile> GenerateRandomMap(Point size, VisualMode mode)
+        {
+            FlatArray<ITile> resultTiles = new FlatArray<ITile>(size.X, size.Y);
+
+            switch (mode)
+            {
+                case VisualMode.ASCII:
+                    for (int i = 0; i < size.X; i++)
+                    {
+                        for (int j = 0; j < size.Y; j++)
+                        {
+                            int val = rng.Next(0, 100);
+                            if (val > 70)
+                            {
+                                Terrain wall = new Terrain("wall", "#", Tile.MaxVolume);
+
+                                // implement terrain
+                                resultTiles[i, j] = new Tile(new Point(i, j), wall);
+                            }
+                            else
+                            {
+                                Terrain grass = new Terrain("grass", ",", 1, Flags.IsTransparent);
+                                
+                                resultTiles[i, j] = new Tile(new Point(i, j), grass);
+                            }
+                        }
+                    }
+
+                    break;
+
+                case VisualMode.Sprites:                    
+                    break;
+            }
+
+            return resultTiles;
         }
     }
 }
