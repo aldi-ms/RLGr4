@@ -46,7 +46,6 @@ namespace RLG.Utilities
         
         private static Random rng = new Random();
 
-
         public static void LoadTileNeighboors(this IMap map)
         {
             for (int x = 0; x < map.Tiles.Width; x++)
@@ -56,14 +55,14 @@ namespace RLG.Utilities
                     Point currentPosition = new Point(x, y);
 
                     string str;
-                    if (map.CheckTile(currentPosition, out str))
+                    if (CheckTile(map, currentPosition, out str))
                     {
                         List<ITile> neighboors = new List<ITile>();
                         foreach (var dir in Directions)
                         {
                             Point newPosition = currentPosition + dir;
 
-                            if (map.CheckTile(newPosition, out str))
+                            if (CheckTile(map, newPosition, out str))
                             {
                                 neighboors.Add(map[newPosition]);
                             }
@@ -75,48 +74,47 @@ namespace RLG.Utilities
             }
         }
 
-        private static bool CheckTile(this IMap map, Point position, out string blocking)
+        public static FlatArray<ITile> GenerateRandomMap(int x, int y, VisualMode mode)
         {
-            IActor pupet = new Actor("pupet", "p", new PropertyBag(), map, new Flags(), 0);
-
-            return pupet.CheckTile(position, out blocking);
-        }
-
-        public static FlatArray<ITile> GenerateRandomMap(Point size, VisualMode mode)
-        {
-            FlatArray<ITile> resultTiles = new FlatArray<ITile>(size.X, size.Y);
+            FlatArray<ITile> resultTiles = new FlatArray<ITile>(x, y);
 
             switch (mode)
             {
                 case VisualMode.ASCII:
-                    for (int i = 0; i < size.X; i++)
                     {
-                        for (int j = 0; j < size.Y; j++)
+                        for (int i = 0; i < x; i++)
                         {
-                            int val = rng.Next(0, 100);
-                            if (val > 70)
+                            for (int j = 0; j < y; j++)
                             {
-                                Terrain wall = new Terrain("wall", "#", Tile.MaxVolume);
-
-                                // implement terrain
-                                resultTiles[i, j] = new Tile(new Point(i, j), wall);
-                            }
-                            else
-                            {
-                                Terrain grass = new Terrain("grass", ",", 1, Flags.IsTransparent);
-                                
-                                resultTiles[i, j] = new Tile(new Point(i, j), grass);
+                                int val = rng.Next(0, 100);
+                                if (val > 70)
+                                {
+                                    Terrain wall = new Terrain("wall", "#", Tile.MaxVolume);
+                                    resultTiles[i, j] = new Tile(new Point(i, j), wall);
+                                }
+                                else
+                                {
+                                    Terrain grass = new Terrain("grass", ",", 5, Flags.IsTransparent);
+                                    resultTiles[i, j] = new Tile(new Point(i, j), grass);
+                                }
                             }
                         }
-                    }
 
-                    break;
+                        break;
+                    }
 
                 case VisualMode.Sprites:                    
                     break;
             }
 
             return resultTiles;
+        }
+
+        private static bool CheckTile(IMap map, Point position, out string blocking)
+        {
+            IActor pupet = new Actor("а", "/", new PropertyBag(), map, new Flags(), 0);
+
+            return pupet.CheckTile(position, out blocking);
         }
     }
 }

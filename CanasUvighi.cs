@@ -55,6 +55,9 @@ namespace RLG
         private ActorPriorityQueue actorQueue;
         private IActor actor;
 
+        // Temporary
+        private IMap testMap;
+
         public CanasUvighi()
         {
             this.graphics = new GraphicsDeviceManager(this);
@@ -96,40 +99,43 @@ namespace RLG
 
             #region Temporary code
 
-            // Create a map for testing purposes
-            Point size = new Point(20, 20);
-            MapContainer map = new MapContainer(
-                                   MapUtilities.GenerateRandomMap(size, VisualMode.ASCII));
-            map.LoadTileNeighboors();
+            // Create a map to use for (test) playground.
+            this.testMap = new MapContainer(
+                                   MapUtilities.GenerateRandomMap(20, 20, VisualMode.ASCII));
+            this.testMap.LoadTileNeighboors();
 
+            // Initialize VisualEngine for the game
             this.visualEngine = new VisualEngine(
                 VisualMode.ASCII,
                 32,
-                new Point(16, 11),
-                map,
+                16, 11,
+                this.testMap,
                 null,
                 this.asciiGraphicsFont);
             this.visualEngine.DeltaTileDrawCoordinates = new Point(4, -6);
             this.visualEngine.ASCIIScale = 0.7f;
 
+            // Initialize MessageLog.
             Rectangle logRect = new Rectangle(
                                     0,
                                     this.visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize,
                                     ScreenWidth - 30,
-                                    (ScreenHeight - 30) - (this.visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize));
-            
+                                    (ScreenHeight - 30) - (this.visualEngine.MapDrawboxTileSize.Y * this.visualEngine.TileSize));            
             this.messageLog = new MessageLog(logRect, this.logFont);
 
+            // Create an actor (unit, character, etc.) for the player.
             this.actor = new Actor(
                 "SCiENiDE",
                 "@",
                 new PropertyBag(),
-                map, 
+                this.testMap, 
                 Flags.IsPlayerControl,
                 85);
             
+            //// TODO: Improve actor spawn/add to actorQueue.
+            // "Spawn" the actor on the map, and add him to the map actor list.
             this.actor.Position = new Point();
-            map[this.actor.Position].AddObject(this.actor);
+            this.testMap[this.actor.Position].AddObject(this.actor);
             this.actorQueue.Add(this.actor);
 
             #endregion
@@ -148,6 +154,8 @@ namespace RLG
             // Get the first waiting (FIFO) key
             Keys key = this.keyboardBuffer.Dequeue();
 
+            #region Actor-independent input
+
             // Process the key
             switch (key)
             {
@@ -156,13 +164,15 @@ namespace RLG
                     break;
 
                 case Keys.Q:
-                    //Actor npc = new Actor("Minotaur", "M", 85);
+                    Actor npc = new Actor("Minotaur", "M", 85);
                     break;
 
                 default:
                     this.keyboardBuffer.Enqueue(key);
                     break;
             }
+
+            #endregion
 
             if (!this.expectCommand)
             {
@@ -178,10 +188,10 @@ namespace RLG
                     {
                         this.expectCommand = true;
 
-                        switch (this.keyboardBuffer.Dequeue())
-                        {
-                        #region Energy-dependent keyboard input
+                        #region Actor-dependent input
 
+                        switch (this.keyboardBuffer.Dequeue())
+                        {                            
                             case Keys.NumPad8:
                             case Keys.K:
                             case Keys.Up:
@@ -260,25 +270,14 @@ namespace RLG
 
                             default:
                                 break;
-
-                            #endregion
                         }
+
+                        #endregion
                     }
                 }
             }
 
             base.Update(gameTime);
-        }
-
-        protected void OnMove(IActor actor)
-        {
-            // this.messageLog.SendMessage(string.Format("player: [{0},{1}]", actor.Position.X, actor.Position.Y));
-            /*var path = actor.GetPathTo(actor.CurrentMap[new Point(12, 19)]);
-            this.visualEngine.HighlightPath(path);
-            if (path == null)
-            {
-                this.messageLog.SendMessage("no path exists to given coordinates.");
-            }*/
         }
 
         /// <summary>
@@ -295,6 +294,17 @@ namespace RLG
             this.messageLog.DrawLog(this.spriteBatch);
 
             base.Draw(gameTime);
+        }
+
+        private void OnMove(IActor actor)
+        {
+            // this.messageLog.SendMessage(string.Format("player: [{0},{1}]", actor.Position.X, actor.Position.Y));
+            /*var path = actor.GetPathTo(actor.CurrentMap[new Point(12, 19)]);
+            this.visualEngine.HighlightPath(path);
+            if (path == null)
+            {
+                this.messageLog.SendMessage("no path exists to given coordinates.");
+            }*/
         }
     }
 }

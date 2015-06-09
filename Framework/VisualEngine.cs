@@ -46,6 +46,8 @@ namespace RLG.Framework
         private FieldOfView<ITile> fieldOfView;
         private ContentManager content;
 
+        #region Constructors
+
         public VisualEngine(
             VisualMode mode, 
             int tileSize,
@@ -100,6 +102,20 @@ namespace RLG.Framework
                     break;
             }
         }
+
+        public VisualEngine(
+            VisualMode mode, 
+            int tileSize,
+            int x,
+            int y,
+            IMap map, 
+            ContentManager content,
+            SpriteFont spriteFont)
+            : this(mode, tileSize, new Point(x, y), map, content, spriteFont)
+        {            
+        }
+
+        #endregion
 
         #region Properties
 
@@ -289,10 +305,10 @@ namespace RLG.Framework
                                 if (this.highlighterIsOn && this.tilesToHighlight.Contains(tile))
                                 {
                                     Rectangle rect = new Rectangle(
-                                        (int)drawPosition.X - this.DeltaTileDrawCoordinates.X, 
-                                        (int)drawPosition.Y - this.DeltaTileDrawCoordinates.Y, 
-                                        this.tileSize, 
-                                        this.tileSize);
+                                                         (int)drawPosition.X - this.DeltaTileDrawCoordinates.X, 
+                                                         (int)drawPosition.Y - this.DeltaTileDrawCoordinates.Y, 
+                                                         this.tileSize, 
+                                                         this.tileSize);
                                     
                                     spriteBatch.Draw(this.highlightTexture, rect, Color.Goldenrod);
                                 }

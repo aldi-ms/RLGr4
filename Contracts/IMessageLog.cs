@@ -24,7 +24,7 @@ namespace RLG.Contracts
     /// <summary>
     /// Interface for the Message Log, implementing ISoundReceiver as well.
     /// </summary>
-    internal interface IMessageLog
+    public interface IMessageLog
     {
         /// <summary>
         /// Gets or sets the color of the text in the log.

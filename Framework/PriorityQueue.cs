@@ -40,6 +40,7 @@ namespace RLG.Framework
         public List<T> Queue
         {
             get { return this.queue; }
+            set { this.queue = value; }
         }
 
         public int Count

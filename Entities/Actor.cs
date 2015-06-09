@@ -26,7 +26,6 @@ namespace RLG.Entities
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.Xna.Framework;
-
     using RLG.Contracts;
     using RLG.Enumerations;
     using RLG.Framework;
@@ -37,12 +36,13 @@ namespace RLG.Entities
         #region Constructors
 
         public Actor(string name, string drawStr, IPropertyBag properties, IMap map, Flags flags, byte volume)
-            :base(name, drawStr, volume, flags)
+            : base(name, drawStr, volume, flags)
         {
             this.Properties = properties;
             this.CurrentMap = map;
 
-            // Default properties to set
+            // Set defaults
+            this.Position = new Point();
             this.Properties["speed"] = 10;
         }
 
@@ -54,7 +54,6 @@ namespace RLG.Entities
         #endregion
 
         #region Properties
-
 
         public Point Position { get; set; }
 
@@ -91,9 +90,11 @@ namespace RLG.Entities
                 return 0;
             }
         }
+
         public bool CheckTile(Point tileCoordinates, out string blockingObject)
         {
             blockingObject = string.Empty;
+
             if (tileCoordinates.X >= this.CurrentMap.Tiles.Width || tileCoordinates.X < 0
                 || tileCoordinates.Y >= this.CurrentMap.Tiles.Height || tileCoordinates.Y < 0)
             {
@@ -119,7 +120,7 @@ namespace RLG.Entities
             
             for (int i = 0; i < gameObjInTile.Length; i++)
             {
-                // TODO Can be improved to sound more natural
+                // TODO Improve message for beter coherence.
                 if (gameObjInTile[i] != null)
                 {
                     sb.AppendFormat("a {0}", gameObjInTile[i]);

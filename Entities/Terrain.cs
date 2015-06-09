@@ -22,7 +22,6 @@
 namespace RLG.Entities
 {
     using System;
-
     using RLG.Contracts;
     using RLG.Enumerations;
 

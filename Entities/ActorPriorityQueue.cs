@@ -53,8 +53,7 @@ namespace RLG.Entities
         /// </summary>
         public override void SortList()
         {
-            Queue.Sort(
-                (x, y) => y.Properties["energy"].CompareTo(x.Properties["energy"]));
+            Queue = Queue.OrderByDescending(x => x.Properties["energy"]);
         }
     }
 }
