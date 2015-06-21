@@ -1,5 +1,5 @@
 ﻿//
-//  ITile.cs
+//  IOrganExtensions.cs
 //
 //  Author:
 //       scienide <alexandar921@abv.bg>
@@ -19,30 +19,25 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace RLG.Contracts
+namespace RLG.Framework.Anatomy
 {
+    using System;
     using System.Collections.Generic;
-    using Microsoft.Xna.Framework;
-    using RLG.Contracts;
-    using RLG.Enumerations;
-    using RLG.Framework.FieldOfView;
+    using System.Linq;
 
-    public interface ITile : IFovCell, IDrawable
+    public static class IOrganExtensions
     {
-        IEnumerable<IGameObject> ObjectsContained { get; }
+        public static IOrgan GetOrganByName(this IEnumerable<IOrgan> organs, string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException(
+                    "name", 
+                    "When looking up organ by name, string name cannot be null or empty!");
+            }
 
-        IEnumerable<ITile> Neighboors { get; set; }
-
-        Point Position { get; }
-
-        Flags Flags { get; set; }
-
-        IPropertyBag<string> Properties { get; set; }
-
-        byte Volume { get; }
-
-        bool AddObject(IGameObject gameObject);
-
-        bool RemoveObject(IGameObject gameObject);
+            return organs.FirstOrDefault(x => x.Properties["name"] == name);
+        }
     }
 }
+

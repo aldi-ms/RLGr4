@@ -61,7 +61,6 @@
     <Compile Include="Framework\FieldOfView\ShadowCasting.cs" />
     <Compile Include="Enumerations\Flags.cs" />
     <Compile Include="Enumerations\VisualMode.cs" />
-    <Compile Include="Enumerations\ObjectType.cs" />
     <Compile Include="Contracts\IActor.cs" />
     <Compile Include="Contracts\IFringe.cs" />
     <Compile Include="Contracts\IItem.cs" />
@@ -88,7 +87,15 @@
     <Compile Include="Entities\Terrain.cs" />
     <Compile Include="Entities\GameObject.cs" />
     <Compile Include="Utilities\TileExtensions.cs" />
-    <Compile Include="Framework\GameEngine.cs" />
+    <Compile Include="Framework\Anatomy\IOrgan.cs" />
+    <Compile Include="Framework\Anatomy\IAnatomy.cs" />
+    <Compile Include="Enumerations\Species.cs" />
+    <Compile Include="Framework\Anatomy\ActorAnatomy.cs" />
+    <Compile Include="Framework\Anatomy\Organ.cs" />
+    <Compile Include="Framework\Anatomy\IOrganExtensions.cs" />
+    <Compile Include="Framework\Anatomy\AnatomyGenerator.cs" />
+    <Compile Include="Framework\ActorQueueHelper.cs" />
+    <Compile Include="Utilities\RandomGeneration\DungeonGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />
@@ -118,6 +125,8 @@
     <Folder Include="Utilities\" />
     <Folder Include="Entities\" />
     <Folder Include="Content\Fonts\" />
+    <Folder Include="Framework\Anatomy\" />
+    <Folder Include="Utilities\RandomGeneration\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

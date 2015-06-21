@@ -21,12 +21,12 @@
 
 namespace RLG.Contracts
 {
-    public interface IPropertyBag
+    public interface IPropertyBag<T>
     {
         /// <summary>
         /// Gets or sets the statistics of an object at the specified index.
         /// </summary>
         /// <param name="index">Index (statistic) to look at.</param>
-        uint this[string index] { get; set; }
+        T this[string index] { get; set; }
     }
 }

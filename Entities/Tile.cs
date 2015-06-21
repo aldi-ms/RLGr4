@@ -28,6 +28,7 @@ namespace RLG.Entities
 
     using RLG.Contracts;
     using RLG.Enumerations;
+    using RLG.Framework;
     using RLG.Utilities;
 
     public class Tile : ITile
@@ -41,6 +42,7 @@ namespace RLG.Entities
             this.Position = position;
             this.objectsContained = new List<IGameObject>();
             this.flags = new Flags();
+            this.Properties = new PropertyBag<string>();
         }
 
         public Tile(Point position, params IGameObject[] objectsToFill)
@@ -53,6 +55,8 @@ namespace RLG.Entities
         }
 
         #region Properties
+
+        public IPropertyBag<string> Properties { get; set; }
 
         public Point Position { get; private set; }
 

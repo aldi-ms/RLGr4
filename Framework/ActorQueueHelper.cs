@@ -29,9 +29,9 @@ namespace RLG.Framework
     using RLG.Enumerations;
     using RLG.Utilities;
 
-    public class GameEngine
+    public class ActorQueueHelper
     {
-        public GameEngine(IMap map)
+        public ActorQueueHelper(IMap map)
         {
             this.CurrentMap = map;
             this.ActorQueue = new ActorPriorityQueue();

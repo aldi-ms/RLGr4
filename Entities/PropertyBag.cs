@@ -22,41 +22,35 @@
 namespace RLG.Framework
 {
     using System.Collections.Generic;
+    using RLG.Contracts;
 
-    public class PropertyBag : RLG.Contracts.IPropertyBag
+    public class PropertyBag<T> : IPropertyBag<T>
     {
-        private Dictionary<string, uint> statistics;
+        private Dictionary<string, T> statistics;
 
         public PropertyBag()
         {
-            this.statistics = new Dictionary<string, uint>();
+            this.statistics = new Dictionary<string, T>();
         }
 
-        public uint this[string index]
+        public T this[string index]
         {
             get
             {
-                uint val;
+                T val;
                 if (this.statistics.TryGetValue(index, out val))
                 {
                     return val;
                 }
 
-                return 0;
+                return default(T);
             }
 
             set
             {
                 if (this.statistics.ContainsKey(index))
                 {
-                    if (this.statistics[index] + value < 0)
-                    {
-                        this.statistics[index] = 0;
-                    }
-                    else 
-                    {
-                        this.statistics[index] += value;
-                    }
+                    this.statistics[index] = value;
                 }
                 else
                 {

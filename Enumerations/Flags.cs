@@ -49,12 +49,6 @@ namespace RLG.Enumerations
         IsVisible = 1 << 2,
 
         /// <summary>
-        /// Indicates whether the game object is blocked,
-        /// meaning an actor cannot move through it.
-        /// </summary>
-        // IsBlocked = 1 << 3,
-
-        /// <summary>
         /// Indicates whether the Tile has been already seen
         /// by the Field of View.
         /// </summary>

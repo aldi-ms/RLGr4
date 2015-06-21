@@ -26,6 +26,7 @@ namespace RLG.Entities
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.Xna.Framework;
+
     using RLG.Contracts;
     using RLG.Enumerations;
     using RLG.Framework;
@@ -35,7 +36,7 @@ namespace RLG.Entities
     {
         #region Constructors
 
-        public Actor(string name, string drawStr, IPropertyBag properties, IMap map, Flags flags, byte volume)
+        public Actor(string name, string drawStr, IPropertyBag<int> properties, IMap map, Flags flags, byte volume)
             : base(name, drawStr, volume, flags)
         {
             this.Properties = properties;
@@ -47,7 +48,7 @@ namespace RLG.Entities
         }
 
         public Actor(string name, string drawStr, byte volume)
-            : this(name, drawStr, new PropertyBag(), null, new Flags(), volume)
+            : this(name, drawStr, new PropertyBag<int>(), null, new Flags(), volume)
         {
         }
 
@@ -59,11 +60,11 @@ namespace RLG.Entities
 
         public IMap CurrentMap { get; set; }
 
-        public IPropertyBag Properties { get; set; }
+        public IPropertyBag<int> Properties { get; set; }
 
         #endregion
 
-        public uint Move(CardinalDirection direction)
+        public int Move(CardinalDirection direction)
         {
             if (this.CurrentMap == null)
             {

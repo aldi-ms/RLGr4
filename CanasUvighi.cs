@@ -21,6 +21,8 @@
 
 namespace RLG
 {
+    #region Using statements
+
     using System;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
@@ -32,6 +34,8 @@ namespace RLG
     using RLG.Enumerations;
     using RLG.Framework;
     using RLG.Utilities;
+
+    #endregion
 
     /// <summary>
     /// This is the main type for your game.
@@ -52,7 +56,7 @@ namespace RLG
         private SpriteFont logFont;
         private IMessageLog messageLog;
         private KeyboardBuffer keyboardBuffer;
-        private ActorPriorityQueue actorQueue;
+        private ActorQueueHelper queueHelper;
         private IActor actor;
 
         // Temporary
@@ -81,7 +85,6 @@ namespace RLG
             this.graphics.ApplyChanges();
             this.IsMouseVisible = true;
 
-            this.actorQueue = new ActorPriorityQueue();
             this.keyboardBuffer = new KeyboardBuffer();
 
             base.Initialize();
@@ -103,6 +106,9 @@ namespace RLG
             this.testMap = new MapContainer(
                                    MapUtilities.GenerateRandomMap(20, 20, VisualMode.ASCII));
             this.testMap.LoadTileNeighboors();
+
+            // The Actor queue (for the turn system) specific to this map.
+            this.queueHelper = new ActorQueueHelper(this.testMap);
 
             // Initialize VisualEngine for the game
             this.visualEngine = new VisualEngine(
@@ -127,7 +133,7 @@ namespace RLG
             this.actor = new Actor(
                 "SCiENiDE",
                 "@",
-                new PropertyBag(),
+                new PropertyBag<int>(),
                 this.testMap, 
                 Flags.IsPlayerControl,
                 85);
@@ -135,9 +141,8 @@ namespace RLG
             //// TODO: Improve actor spawn/add to actorQueue.
             // "Spawn" the actor on the map, and add him to the map actor list.
             this.actor.Position = new Point();
-            this.testMap[this.actor.Position].AddObject(this.actor);
-            this.actorQueue.Add(this.actor);
-
+            this.queueHelper.AddActor(this.actor);
+           
             #endregion
         }
 
@@ -164,7 +169,7 @@ namespace RLG
                     break;
 
                 case Keys.Q:
-                    Actor npc = new Actor("Minotaur", "M", 85);
+                    //Actor npc = new Actor("Minotaur", "M", 85);
                     break;
 
                 default:
@@ -176,12 +181,12 @@ namespace RLG
 
             if (!this.expectCommand)
             {
-                this.actorQueue.AccumulateEnergy();
+                this.queueHelper.ActorQueue.AccumulateEnergy();
             }
 
-            for (int x = 0; x < this.actorQueue.Count; x++)
+            for (int x = 0; x < this.queueHelper.ActorQueue.Count; x++)
             {
-                IActor current = this.actorQueue[x];
+                IActor current = this.queueHelper.ActorQueue[x];
                 if (current.Properties["energy"] >= MinTurnCost)
                 {
                     if (current.Flags.HasFlag(Flags.IsPlayerControl))

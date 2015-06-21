@@ -41,13 +41,13 @@ namespace RLG.Contracts
         /// Gets or sets the statistics of the actor.
         /// </summary>
         /// <value>The statistics.</value>
-        IPropertyBag Properties { get; set; }
+        IPropertyBag<int> Properties { get; set; }
 
         /// <summary>
         /// Move the actor in the specified direction on the map.
         /// </summary>
         /// <param name="direction">Direction.</param>
-        uint Move(CardinalDirection direction);
+        int Move(CardinalDirection direction);
 
         bool CheckTile(Point tileCoordinates, out string blockingObject);
     }

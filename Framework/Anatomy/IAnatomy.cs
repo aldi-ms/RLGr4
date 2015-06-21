@@ -1,5 +1,5 @@
 ﻿//
-//  ITile.cs
+//  IAnatomy.cs
 //
 //  Author:
 //       scienide <alexandar921@abv.bg>
@@ -19,30 +19,13 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace RLG.Contracts
+namespace RLG.Framework.Anatomy
 {
     using System.Collections.Generic;
-    using Microsoft.Xna.Framework;
-    using RLG.Contracts;
-    using RLG.Enumerations;
-    using RLG.Framework.FieldOfView;
 
-    public interface ITile : IFovCell, IDrawable
+    public interface IAnatomy
     {
-        IEnumerable<IGameObject> ObjectsContained { get; }
-
-        IEnumerable<ITile> Neighboors { get; set; }
-
-        Point Position { get; }
-
-        Flags Flags { get; set; }
-
-        IPropertyBag<string> Properties { get; set; }
-
-        byte Volume { get; }
-
-        bool AddObject(IGameObject gameObject);
-
-        bool RemoveObject(IGameObject gameObject);
+        IEnumerable<IOrgan> Anatomy { get; set; }
     }
 }
+

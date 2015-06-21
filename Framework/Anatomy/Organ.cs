@@ -1,5 +1,5 @@
 ﻿//
-//  ObjectType.cs
+//  Organ.cs
 //
 //  Author:
 //       scienide <alexandar921@abv.bg>
@@ -19,15 +19,23 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// DEPRECATED
-namespace RLG.Enumerations
+namespace RLG.Framework.Anatomy
 {
-    public enum ObjectType
+    using System.Collections.Generic;
+    using RLG.Contracts;
+
+    public class Organ : IOrgan
     {
-        Terrain,
-        Actor,
-        Fringe,
-        Item,
-        Other
+        public Organ(string name, int hp)
+        {
+            this.Properties["name"] = name;
+            this.Properties["hp"] = hp.ToString();
+        }
+
+        public IPropertyBag<string> Properties { get; set; }
+
+        public List<IOrgan> ParentOrgans { get; set; }
+
+        public List<IOrgan> ChildOrgans { get; set; }
     }
 }
