@@ -1,5 +1,5 @@
 ﻿//
-//  AnatomyGenerator.cs
+//  Anatomy.cs
 //
 //  Author:
 //       scienide <alexandar921@abv.bg>
@@ -24,13 +24,38 @@ namespace RLG.Framework.Anatomy
     using System;
     using System.Collections.Generic;
     using RLG.Enumerations;
-    using RLG.Framework.Anatomy;
+    using RLG.Framework.Anatomy.Contracts;
 
-    public static class AnatomyGenerator
+    public class Anatomy : IAnatomy
     {
-        public static IAnatomy GenerateHumanAnatomy()
+        public Anatomy(Species species)
+        {            
+            this.Organs = GetOrgans(species);
+        }
+
+        public IEnumerable<IOrgan> Organs { get; set; }
+
+        #region Anatomy Generators
+
+        private static IEnumerable<IOrgan> GetOrgans(Species species)
         {
-            ActorAnatomy humanAnatomy = new ActorAnatomy(Species.Human);
+            IEnumerable<IOrgan> organs = new List<IOrgan>();
+
+            switch (species)
+            {
+                case Species.Human:
+                    {
+                        organs = HumanAnatomy();
+                        break;
+                    }
+            }
+
+            return organs;
+        }
+
+        private static IEnumerable<IOrgan> HumanAnatomy()
+        {
+            List<IOrgan> organs = new List<IOrgan>();
 
             #region Create Organs
 
@@ -58,14 +83,14 @@ namespace RLG.Framework.Anatomy
             #region Make Organ child-connections
 
             torso.ChildOrgans = new List<IOrgan>()
-            { 
-                head, leftHand, rightHand, leftLeg, rightLeg 
-            };
+                { 
+                    head, leftHand, rightHand, leftLeg, rightLeg 
+                };
 
             head.ChildOrgans = new List<IOrgan>()
-            {
-                hair, leftEar, rightEar, nose, mouth
-            };
+                {
+                    hair, leftEar, rightEar, nose, mouth
+                };
 
             leftArm.ChildOrgans = new List<IOrgan>() { leftHand };
 
@@ -79,8 +104,9 @@ namespace RLG.Framework.Anatomy
 
             #region Add Parent Organs
 
-            foreach (var parent in humanAnatomy.Anatomy)
+            foreach (var parent in organs)
             {
+                // Create parents' lists if they don't exist
                 if (parent.ChildOrgans == null)
                 {
                     parent.ChildOrgans = new List<IOrgan>();
@@ -90,8 +116,11 @@ namespace RLG.Framework.Anatomy
                     parent.ParentOrgans = new List<IOrgan>();
                 }
 
+                // Go through all child organs, and add them to 
+                // the designated parents
                 foreach (var child in parent.ChildOrgans)
                 {
+                    // Check if the childs' lists are created as well
                     if (child.ChildOrgans == null)
                     {
                         child.ChildOrgans = new List<IOrgan>();
@@ -101,13 +130,16 @@ namespace RLG.Framework.Anatomy
                         child.ParentOrgans = new List<IOrgan>();
                     }
 
+                    // Add the child it's parent organs (elements).
                     child.ParentOrgans.Add(parent);
                 }
             }
 
             #endregion
 
-            return humanAnatomy;
+            return organs;
         }
+
+        #endregion
     }
 }

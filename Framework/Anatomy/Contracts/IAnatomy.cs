@@ -19,13 +19,13 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace RLG.Framework.Anatomy
+namespace RLG.Framework.Anatomy.Contracts
 {
     using System.Collections.Generic;
 
     public interface IAnatomy
     {
-        IEnumerable<IOrgan> Anatomy { get; set; }
+        IEnumerable<IOrgan> Organs { get; set; }
     }
 }
 

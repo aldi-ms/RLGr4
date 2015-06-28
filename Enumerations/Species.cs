@@ -22,7 +22,8 @@ namespace RLG.Enumerations
 {
     public enum Species
     {
-        Human
+        Human,
+        Unknown
     }
 }
 

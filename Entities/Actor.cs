@@ -26,21 +26,31 @@ namespace RLG.Entities
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.Xna.Framework;
-
     using RLG.Contracts;
     using RLG.Enumerations;
     using RLG.Framework;
+    using RLG.Framework.Anatomy;
+    using RLG.Framework.Anatomy.Contracts;
     using RLG.Utilities;
 
     public class Actor : GameObject, IActor
     {
         #region Constructors
 
-        public Actor(string name, string drawStr, IPropertyBag<int> properties, IMap map, Flags flags, byte volume)
+        public Actor(
+            string name,
+            string drawStr, 
+            IPropertyBag<int> properties, 
+            IMap map,
+            Flags flags, 
+            byte volume,
+            Species species)
             : base(name, drawStr, volume, flags)
         {
             this.Properties = properties;
             this.CurrentMap = map;
+            this.Species = species;
+            this.Anatomy = new Anatomy(species);
 
             // Set defaults
             this.Position = new Point();
@@ -48,13 +58,17 @@ namespace RLG.Entities
         }
 
         public Actor(string name, string drawStr, byte volume)
-            : this(name, drawStr, new PropertyBag<int>(), null, new Flags(), volume)
+            : this(name, drawStr, new PropertyBag<int>(), null, new Flags(), volume, Species.Unknown)
         {
         }
 
         #endregion
 
         #region Properties
+
+        public Species Species { get; set; }
+
+        public IAnatomy Anatomy { get; set; }
 
         public Point Position { get; set; }
 
@@ -102,13 +116,15 @@ namespace RLG.Entities
                 return false;
             }
 
-            // Try to get in the tile (returns true if this.Volume + prev.Tile.Volume < Tile.MaxVolume
+            // Try to get in the tile 
+            // returns true if ((this.Volume + prev.Tile.Volume) < Tile.MaxVolume)
             if (this.CurrentMap[tileCoordinates].Try(this))
             {
                 return true;
             }
 
-            // Otherwise get send a information message
+            #region Return Info Message
+
             StringBuilder sb = new StringBuilder();
 
             sb.Append("There doesn't appear to be enough space for you. There is ");
@@ -140,6 +156,8 @@ namespace RLG.Entities
             }
 
             blockingObject = sb.ToString();
+
+            #endregion
 
             return false;
         }

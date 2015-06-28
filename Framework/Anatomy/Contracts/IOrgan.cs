@@ -1,5 +1,5 @@
 ﻿//
-//  Anatomy.cs
+//  IOrgan.cs
 //
 //  Author:
 //       scienide <alexandar921@abv.bg>
@@ -19,29 +19,17 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace RLG.Framework.Anatomy
+namespace RLG.Framework.Anatomy.Contracts
 {
-    using System;
     using System.Collections.Generic;
+    using RLG.Contracts;
 
-    using RLG.Enumerations;
-    using RLG.Framework.Anatomy;
-
-    public class ActorAnatomy : IAnatomy
+    public interface IOrgan
     {
-        public ActorAnatomy(Species species)
-        {
-            switch (species)
-            {
-                case Species.Human:
-                    {
-                        //this.Anatomy = AnatomyGenerator.GenerateHumanAnatomy();
-                    }
+        IPropertyBag<string> Properties { get; set; }
 
-                    break;
-            }
-        }
+        List<IOrgan> ParentOrgans { get; set; }
 
-        public IEnumerable<IOrgan> Anatomy { get; set; }
+        List<IOrgan> ChildOrgans { get; set; }
     }
 }

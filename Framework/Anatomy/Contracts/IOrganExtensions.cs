@@ -1,5 +1,5 @@
 ﻿//
-//  IOrgan.cs
+//  IOrganExtensions.cs
 //
 //  Author:
 //       scienide <alexandar921@abv.bg>
@@ -19,17 +19,25 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace RLG.Framework.Anatomy
+namespace RLG.Framework.Anatomy.Contracts
 {
+    using System;
     using System.Collections.Generic;
-    using RLG.Contracts;
+    using System.Linq;
 
-    public interface IOrgan
+    public static class IOrganExtensions
     {
-        IPropertyBag<string> Properties { get; set; }
+        public static IOrgan GetOrganByName(this IEnumerable<IOrgan> organs, string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException(
+                    "name", 
+                    "When looking up organ by name, string name cannot be null or empty!");
+            }
 
-        List<IOrgan> ParentOrgans { get; set; }
-
-        List<IOrgan> ChildOrgans { get; set; }
+            return organs.FirstOrDefault(x => x.Properties["name"] == name);
+        }
     }
 }
+

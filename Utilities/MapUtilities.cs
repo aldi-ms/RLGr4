@@ -112,7 +112,7 @@ namespace RLG.Utilities
 
         private static bool CheckTile(IMap map, Point position, out string blocking)
         {
-            IActor pupet = new Actor("а", "/", new PropertyBag<int>(), map, new Flags(), 0);
+            IActor pupet = new Actor("а", "/", new PropertyBag<int>(), map, new Flags(), 0, Species.Unknown);
 
             return pupet.CheckTile(position, out blocking);
         }

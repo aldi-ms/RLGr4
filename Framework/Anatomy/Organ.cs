@@ -23,11 +23,13 @@ namespace RLG.Framework.Anatomy
 {
     using System.Collections.Generic;
     using RLG.Contracts;
+    using RLG.Framework.Anatomy.Contracts;
 
     public class Organ : IOrgan
     {
         public Organ(string name, int hp)
         {
+            this.Properties = new PropertyBag<string>();
             this.Properties["name"] = name;
             this.Properties["hp"] = hp.ToString();
         }

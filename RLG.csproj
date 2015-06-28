@@ -87,15 +87,15 @@
     <Compile Include="Entities\Terrain.cs" />
     <Compile Include="Entities\GameObject.cs" />
     <Compile Include="Utilities\TileExtensions.cs" />
-    <Compile Include="Framework\Anatomy\IOrgan.cs" />
-    <Compile Include="Framework\Anatomy\IAnatomy.cs" />
     <Compile Include="Enumerations\Species.cs" />
-    <Compile Include="Framework\Anatomy\ActorAnatomy.cs" />
     <Compile Include="Framework\Anatomy\Organ.cs" />
-    <Compile Include="Framework\Anatomy\IOrganExtensions.cs" />
-    <Compile Include="Framework\Anatomy\AnatomyGenerator.cs" />
     <Compile Include="Framework\ActorQueueHelper.cs" />
     <Compile Include="Utilities\RandomGeneration\DungeonGenerator.cs" />
+    <Compile Include="Framework\CombatEngine.cs" />
+    <Compile Include="Framework\Anatomy\Contracts\IAnatomy.cs" />
+    <Compile Include="Framework\Anatomy\Contracts\IOrgan.cs" />
+    <Compile Include="Framework\Anatomy\Contracts\IOrganExtensions.cs" />
+    <Compile Include="Framework\Anatomy\Anatomy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />
@@ -127,6 +127,7 @@
     <Folder Include="Content\Fonts\" />
     <Folder Include="Framework\Anatomy\" />
     <Folder Include="Utilities\RandomGeneration\" />
+    <Folder Include="Framework\Anatomy\Contracts\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

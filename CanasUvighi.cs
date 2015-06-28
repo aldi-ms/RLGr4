@@ -136,7 +136,8 @@ namespace RLG
                 new PropertyBag<int>(),
                 this.testMap, 
                 Flags.IsPlayerControl,
-                85);
+                85,
+                Species.Human);
             
             //// TODO: Improve actor spawn/add to actorQueue.
             // "Spawn" the actor on the map, and add him to the map actor list.
